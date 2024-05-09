@@ -14,6 +14,7 @@ namespace DAL
         public DbSet<Conversion> Conversions { get; set; }
         public DbSet<Group> Groups { get; set; } 
         public DbSet<TransactionHistory> TransactionHistory { get; set; }
+        public DbSet<Account> Accounts { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<User_Group> User_Groups { get; set; }
 
