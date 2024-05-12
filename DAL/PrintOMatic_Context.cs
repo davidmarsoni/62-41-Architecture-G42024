@@ -22,6 +22,8 @@ namespace DAL
         {
         }
 
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
            // builder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=PrintOMatic");
@@ -35,5 +37,37 @@ namespace DAL
                 .WithMany(e => e.Users)
                 .UsingEntity<User_Group>();
         }
+
+        public override int SaveChanges()
+        {
+            UpdateTimestamps();
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            UpdateTimestamps();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void UpdateTimestamps()
+        {
+            var entities = ChangeTracker.Entries()
+                .Where(x => x.Entity is Account && (x.State == EntityState.Added || x.State == EntityState.Modified));
+
+            var currentDateTime = DateTime.Now;
+
+            foreach (var entity in entities)
+            {
+                if (entity.State == EntityState.Added)
+                {
+                    ((Account)entity.Entity).CreatedAt = currentDateTime;
+                }
+
+                ((Account)entity.Entity).UpdatedAt = currentDateTime;
+            }
+        }
     }
+
+
 }

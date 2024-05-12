@@ -17,9 +17,7 @@ namespace DAL
                 Email = "BBB@a.com",
                 Username = "BBB",
                 Password = "BBB",
-                Salt = "salt",
-                CreatedAt = System.DateTime.Now,
-                UpdatedAt = System.DateTime.Now,
+                Salt = "salt",     
                 IsDeleted = false
             };
 
@@ -29,8 +27,6 @@ namespace DAL
             var group = new Group
             {
                 Name = "Admin",
-                CreatedAt = System.DateTime.Now,
-                UpdatedAt = System.DateTime.Now,
                 IsDeleted = false
             };
 
@@ -56,14 +52,27 @@ namespace DAL
 
             context.Accounts.Add(account);
 
-            //try to add a conversion
-            var conversion = new Conversion
-            {
-                Name = "1 BW A4",
-                Value = (decimal)0.42
-            };
+            // Create a list to hold the conversions
+            var conversions = new List<Conversion>();
 
-            context.Conversions.Add(conversion);
+            // Loop 10 times to create 10 conversions
+            for (int i = 1; i <= 10; i++)
+            {
+                var conversion = new Conversion
+                {
+                    Name = $"Conversion {i}",
+                    Value = (decimal)(0.42 * i)
+                };
+
+                conversions.Add(conversion);
+            }
+
+            // Add the conversions to the context
+            foreach (var conversion in conversions)
+            {
+                context.Conversions.Add(conversion);
+            }
+ 
 
             context.SaveChanges();
 
@@ -75,8 +84,8 @@ namespace DAL
                 DateTime = System.DateTime.Now,
                 TransactionType = TransactionType.AddCredit,
                 Src = Src.PayOnline,
-                ConversionName = conversion.Name,
-                ConversionValue = conversion.Value
+                ConversionName = conversions.Last().Name,
+                ConversionValue = conversions.Last().Value
             };
 
             context.TransactionHistory.Add(transaction);

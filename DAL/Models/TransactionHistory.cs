@@ -5,6 +5,8 @@ namespace DAL.Models
     public class TransactionHistory
     {
         public int TransactionHistoryId { get; set; }
+
+        public int AccountId { get; set; }
         public Account Account { get; set; }
         public DateTime DateTime { get; set; }
         public Src Src { get; set; }
