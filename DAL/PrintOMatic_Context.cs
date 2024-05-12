@@ -18,9 +18,13 @@ namespace DAL
         public DbSet<User> Users { get; set; }
         public DbSet<User_Group> User_Groups { get; set; }
 
+        public PrintOMatic_Context(DbContextOptions<PrintOMatic_Context> options) : base(options)
+        {
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
-            builder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=PrintOMatic");
+           // builder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=PrintOMatic");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

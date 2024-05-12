@@ -9,7 +9,7 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            using var context = new PrintOMatic_Context();
+            /*using var context = new PrintOMatic_Context();
             var created = context.Database.EnsureCreated();
 
             if (created)
@@ -105,7 +105,7 @@ namespace TestApp
 
             // save the changes
 
-            context.SaveChanges();
+            context.SaveChanges();*/
         }
     }
 }
