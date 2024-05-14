@@ -2,6 +2,8 @@ using DAL;
 using Microsoft.CodeAnalysis.Scripting.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using DAL.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace WebApplication1
 {
@@ -16,6 +18,13 @@ namespace WebApplication1
 
             builder.Services.AddDbContext<PrintOMatic_Context>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            // Add Identity
+            builder.Services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<PrintOMatic_Context>();
+            builder.Services.AddMemoryCache();
+            builder.Services.AddSession();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
 
             var app = builder.Build();
 
@@ -25,7 +34,7 @@ namespace WebApplication1
                 {
                     var services = scope.ServiceProvider;
                     var context = services.GetRequiredService<PrintOMatic_Context>();
-                    Seed.SeedData(context);
+                    _ = Seed.SeedUsersAndRolesAsync(services, context);
                 }
             }
 
