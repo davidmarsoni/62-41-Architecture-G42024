@@ -50,6 +50,9 @@ namespace MVC.Controllers
         public IActionResult Create()
         {
             ViewData["AccountId"] = new SelectList(_context.Accounts, "Id", "Id");
+            ViewData["Src"] = new SelectList(Enum.GetValues(typeof(DAL.Classes.Src)));
+            ViewData["TransactionType"] = new SelectList(Enum.GetValues(typeof(DAL.Classes.TransactionType)));
+            Console.WriteLine(ViewData["Src"]);
             return View();
         }
 
@@ -60,6 +63,15 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TransactionHistoryId,AccountId,DateTime,Src,TransactionType,Amount,ConversionName,ConversionValue")] TransactionHistory transactionHistory)
         {
+            Account account = _context.Accounts.Find(transactionHistory.AccountId);
+            if (account == null)
+            {
+                ModelState.AddModelError("AccountId", "Invalid account ID");
+            }
+            else { 
+                transactionHistory.Account = account;
+                ModelState.Remove("Account");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(transactionHistory);

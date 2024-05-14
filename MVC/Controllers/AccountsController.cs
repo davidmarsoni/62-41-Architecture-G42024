@@ -59,6 +59,14 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,UserId,Balance,CreatedAt,UpdatedAt")] Account account)
         {
+            User user = _context.Users.Find(account.UserId);
+            if (user == null)
+            {
+                ModelState.AddModelError("UserId", "User does not exist");
+            }
+            else { 
+                ModelState.Remove("User");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(account);
