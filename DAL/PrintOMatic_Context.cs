@@ -1,4 +1,6 @@
 ﻿using DAL.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class PrintOMatic_Context : DbContext
+    public class PrintOMatic_Context : IdentityDbContext<User> // Add here <User, ROLE CLASS> to add roles
     { 
         public DbSet<Conversion> Conversions { get; set; }
         public DbSet<Group> Groups { get; set; } 
@@ -31,11 +33,16 @@ namespace DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            base.OnModelCreating(modelBuilder);
+
             // Configure many-to-many
             modelBuilder.Entity<User>()
                 .HasMany(e => e.Groups)
                 .WithMany(e => e.Users)
                 .UsingEntity<User_Group>();
+
+            modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(l => new { l.LoginProvider, l.ProviderKey });
         }
 
         public override int SaveChanges()
