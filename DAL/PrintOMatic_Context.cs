@@ -20,7 +20,7 @@ namespace DAL
 
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
-           // builder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=PrintOMatic");
+           builder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=PrintOMatic");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

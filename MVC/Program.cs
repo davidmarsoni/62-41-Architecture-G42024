@@ -2,6 +2,8 @@ using DAL;
 using Microsoft.CodeAnalysis.Scripting.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using MVC.Services.Interfaces;
+using MVC.Services;
 
 namespace WebApplication1
 {
@@ -14,20 +16,9 @@ namespace WebApplication1
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddDbContext<PrintOMatic_Context>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddHttpClient<IAccountService, AccountService>();
 
             var app = builder.Build();
-
-            if(args.Length == 1 && args[0] == "seedData")
-            {
-                using(var scope = app.Services.CreateScope())
-                {
-                    var services = scope.ServiceProvider;
-                    var context = services.GetRequiredService<PrintOMatic_Context>();
-                    Seed.SeedData(context);
-                }
-            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -45,9 +36,8 @@ namespace WebApplication1
             app.UseAuthorization();
 
             app.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
-
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }

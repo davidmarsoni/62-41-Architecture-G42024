@@ -11,7 +11,7 @@ object value = builder.Services.AddControllers();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<PrintOMatic_Context>(options =>
 {
-    options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=PrintOMaticDB",
+    options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=PrintOMatic",
         providerOptions => providerOptions.EnableRetryOnFailure());
 }
 );

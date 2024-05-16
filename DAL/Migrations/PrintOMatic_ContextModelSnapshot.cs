@@ -51,11 +51,11 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.Conversion", b =>
                 {
-                    b.Property<int>("ConversionId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ConversionId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -64,18 +64,18 @@ namespace DAL.Migrations
                     b.Property<decimal>("Value")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("ConversionId");
+                    b.HasKey("Id");
 
                     b.ToTable("Conversions");
                 });
 
             modelBuilder.Entity("DAL.Models.Group", b =>
                 {
-                    b.Property<int>("GroupId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GroupId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Acronym")
                         .HasColumnType("nvarchar(max)");
@@ -87,18 +87,18 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("GroupId");
+                    b.HasKey("Id");
 
                     b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("DAL.Models.TransactionHistory", b =>
                 {
-                    b.Property<int>("TransactionHistoryId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionHistoryId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AccountId")
                         .HasColumnType("int");
@@ -121,7 +121,7 @@ namespace DAL.Migrations
                     b.Property<int>("TransactionType")
                         .HasColumnType("int");
 
-                    b.HasKey("TransactionHistoryId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
@@ -154,14 +154,6 @@ namespace DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Salt")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
