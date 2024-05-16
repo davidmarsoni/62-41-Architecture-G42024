@@ -15,10 +15,7 @@ namespace DAL
                 FirstName = "BBB",
                 LastName = "BBB",
                 Email = "BBB@a.com",
-                Username = "BBB",
-                Password = "BBB",
-                Salt = "salt",     
-                IsDeleted = false
+                Username = "BBB"
             };
 
             context.Users.Add(user);
@@ -26,8 +23,7 @@ namespace DAL
             //try to add a group
             var group = new Group
             {
-                Name = "Admin",
-                IsDeleted = false
+                Name = "Admin"
             };
 
             context.Groups.Add(group);
@@ -89,9 +85,6 @@ namespace DAL
             };
 
             context.TransactionHistory.Add(transaction);
-
-            // modify the account balance
-            account.Deposit(transaction.Amount);
 
             // save the changes
 

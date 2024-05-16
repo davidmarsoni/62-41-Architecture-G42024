@@ -8,10 +8,10 @@ namespace DAL.Models
 {
     public class Group
     {
-        public int GroupId { get; set; }
-        public string Name { get; set; }
+        public int Id { get; set; }
+        public required string Name { get; set; }
         public string? Acronym { get; set; }
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false!;
 
         public ICollection<User> Users { get; } = new List<User>();
         public ICollection<User_Group> User_Groups { get;  } = new List<User_Group>();
