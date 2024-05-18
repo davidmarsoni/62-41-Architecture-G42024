@@ -1,18 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 using MVC.Services.Interfaces;
-using MVCProject.Controllers;
 using System.Diagnostics;
 
 namespace MVC.Controllers
 {
-    public class FacultiesController : Controller
+    public class LoginController : Controller
     {
-        private readonly ILogger<FacultiesController> _logger;
-        private readonly IUserService _userService;
-        private readonly IGroupService groupService;
+        private readonly ILogger<LoginController> _logger;
 
-        public FacultiesController(ILogger<FacultiesController> logger)
+        public LoginController(ILogger<LoginController> logger)
         {
             _logger = logger;
         }

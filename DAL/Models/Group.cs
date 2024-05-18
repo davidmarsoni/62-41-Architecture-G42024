@@ -15,6 +15,5 @@ namespace DAL.Models
 
         public ICollection<User> Users { get; } = new List<User>();
         public ICollection<User_Group> User_Groups { get;  } = new List<User_Group>();
-
     }
 }

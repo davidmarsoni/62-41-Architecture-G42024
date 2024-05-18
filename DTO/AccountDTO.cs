@@ -9,7 +9,6 @@
         // user fields
         public int UserId { get; set; }
 
-        // transaction history fields
-        public List<TransactionHistoryDTO> transactionHistoryDTOs { get; set; }
+        public string? UserName { get; set; }
     }
 }

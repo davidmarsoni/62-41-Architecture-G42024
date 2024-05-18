@@ -9,6 +9,7 @@ namespace WebApi.Mapper
         {
             UserDTO userDTO = new UserDTO();
             userDTO.Id = user.Id;
+            userDTO.Username = user.Username;
             userDTO.FirstName = user.FirstName;
             userDTO.LastName = user.LastName;
             userDTO.Email = user.Email;

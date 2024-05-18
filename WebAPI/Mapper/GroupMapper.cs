@@ -7,10 +7,13 @@ namespace WebApi.Mapper
     {
         public static GroupDTO toDTO (Group group)
         {
-            GroupDTO groupDTO = new GroupDTO();
-            groupDTO.GroupId = group.Id;
-            groupDTO.Name = group.Name;
-            groupDTO.Acronym = group.Acronym;
+            GroupDTO groupDTO = new GroupDTO
+            {
+                GroupId = group.Id,
+                Name = group.Name,
+                Acronym = group.Acronym,
+                IsDeleted = group.IsDeleted
+            };
             return groupDTO;
         }
 
@@ -20,30 +23,9 @@ namespace WebApi.Mapper
             {
                 Id = groupDTO.GroupId,
                 Name = groupDTO.Name,
-                Acronym = groupDTO.Acronym
+                Acronym = groupDTO.Acronym,
+                IsDeleted = groupDTO.IsDeleted
             };
-            return group;
-        }
-
-        // map list of users
-        
-        public static GroupDTO addUsersCollection(Group group, GroupDTO groupDTO)
-        {
-            groupDTO.UserDTOs = new List<UserDTO>();
-            foreach (User user in group.Users)
-            {
-                groupDTO.UserDTOs.Add(UserMapper.toDTO(user));
-            }
-            return groupDTO;
-        }
-
-        public static Group addUsersCollection(GroupDTO groupDTO, Group group)
-        {
-            // no need to create new list of users -> ICollection create itself
-            foreach (UserDTO userDTO in groupDTO.UserDTOs)
-            {
-                group.Users.Add(UserMapper.toDAL(userDTO));
-            }
             return group;
         }
     }

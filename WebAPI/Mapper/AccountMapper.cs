@@ -5,21 +5,26 @@ namespace WebApi.Mapper
 {
     public class AccountMapper
     {
-        public static AccountDTO toDTO (Account account)
+        public static AccountDTO toDTO (Account account, User? user)
         {
-            AccountDTO accountDTO = new AccountDTO();
-            accountDTO.AccountId = account.Id;
-            accountDTO.Balance = account.Balance;
-            accountDTO.UserId = account.Id;
+            AccountDTO accountDTO = new AccountDTO
+            {
+                AccountId = account.Id,
+                Balance = account.Balance,
+                UserId = account.UserId,
+                UserName = user?.Username
+            };
             return accountDTO;
         }
 
         public static Account toDAL (AccountDTO accountDTO)
         {
-            Account account = new Account();
-            account.Id = accountDTO.AccountId;
-            account.Balance = accountDTO.Balance;      
-            account.UserId = accountDTO.UserId;
+            Account account = new Account
+            {
+                Id = accountDTO.AccountId,
+                Balance = accountDTO.Balance,
+                UserId = accountDTO.UserId
+            };
             return account;
         }
 

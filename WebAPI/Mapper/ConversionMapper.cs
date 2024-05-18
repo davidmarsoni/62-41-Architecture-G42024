@@ -7,10 +7,12 @@ namespace WebApi.Mapper
     {
         public static ConversionDTO toDTO (Conversion conversion)
         {
-            ConversionDTO conversionDTO = new ConversionDTO();
-            conversionDTO.ConversionId = conversion.Id;
-            conversionDTO.ConversionName = conversion.Name;
-            conversionDTO.ConversionValue = conversion.Value;
+            ConversionDTO conversionDTO = new ConversionDTO
+            {
+                ConversionId = conversion.Id,
+                ConversionName = conversion.Name,
+                ConversionValue = conversion.Value
+            };
             return conversionDTO;
         }
 

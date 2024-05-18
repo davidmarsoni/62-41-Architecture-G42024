@@ -1,6 +1,8 @@
 ﻿
 using DTO;
 using MVC.Services.Interfaces;
+using QS = MVC.Services.QuerySnippet.QuerySnippet;
+using System.Net;
 using System.Text.Json;
 
 namespace MVC.Services
@@ -8,7 +10,7 @@ namespace MVC.Services
     public class AccountService : IAccountService
     {
         private readonly HttpClient _client;
-        private readonly string _baseUrl = "https://localhost:7176/api/account";
+        private readonly string _baseUrl = "https://localhost:7176/api/accounts";
 
         public AccountService(HttpClient client)
         {
@@ -20,22 +22,29 @@ namespace MVC.Services
             throw new NotImplementedException();
         }
 
-        public async Task<List<AccountDTO>> GetAllAccounts()
+        public async Task<IEnumerable<AccountDTO>> GetAllAccounts()
         {
-            var response = await _client.GetAsync(_baseUrl);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsStringAsync();
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            var accounts = JsonSerializer.Deserialize<List<AccountDTO>>(responseBody, options);
+            HttpResponseMessage? httpResponse = await QS.QueryOnURL(_client, _baseUrl);
+            if (httpResponse == null)
+            { return null; }
+            var responseBody = await httpResponse.Content.ReadAsStringAsync();
+            var accounts = JsonSerializer.Deserialize<List<AccountDTO>>(responseBody, QS.JsonSerializerOpt);
             return accounts;
         }
 
         public async Task<AccountDTO> CreateAccount(AccountDTO accountDTO)
         {
-            throw new NotImplementedException();
+            var response = await _client.PostAsJsonAsync(_baseUrl, accountDTO);
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode == HttpStatusCode.Created)
+            {
+                return JsonSerializer.Deserialize<AccountDTO>(
+                                       responseBody, options: new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            } else
+            {
+                return null;
+            }
         }
 
         public async Task<AccountDTO> UpdateAccount(AccountDTO accountDTO)

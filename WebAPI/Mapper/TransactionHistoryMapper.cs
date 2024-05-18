@@ -3,7 +3,7 @@ using DAL.Models;
 
 namespace WebApi.Mapper
 {
-    public class TransactionHistoryManager
+    public class TransactionHistoryMapper
     {
         public static TransactionHistoryDTO toDTO(TransactionHistory transactionHistory)
         {
@@ -19,6 +19,22 @@ namespace WebApi.Mapper
                 ConversionValue = transactionHistory.ConversionValue,
             };
             return transactionHistoryDTO;
+        }
+
+        public static TransactionHistory toDAL(TransactionHistoryDTO transactionHistoryDTO)
+        {
+            TransactionHistory transactionHistory = new TransactionHistory
+            {
+                Id = transactionHistoryDTO.TransactionHistoryId,
+                Amount = transactionHistoryDTO.Amount,
+                DateTime = transactionHistoryDTO.DateTime,
+                AccountId = transactionHistoryDTO.AccountId,
+                Src = transactionHistoryDTO.Src,
+                TransactionType = transactionHistoryDTO.TransactionType,
+                ConversionName = transactionHistoryDTO.ConversionName,
+                ConversionValue = transactionHistoryDTO.ConversionValue,
+            };
+            return transactionHistory;
         }
     }
 }
