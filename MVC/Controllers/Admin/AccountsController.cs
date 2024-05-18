@@ -12,6 +12,7 @@ using MVCProject.Controllers;
 using MVC.Services;
 using System.Collections;
 using DTO;
+using MVC.Models;
 
 namespace MVC.Controllers.Admin
 {
@@ -37,26 +38,26 @@ namespace MVC.Controllers.Admin
         // GET: Accounts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            /*if (id == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var account = await _context.Accounts
-                .Include(a => a.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var account = await _accountService.GetAccountById(id.Value);
+
             if (account == null)
             {
-                return NotFound();
+                return RedirectToAction("Index", "Error");
             }
-            */
-            return View(/*account*/);
+            
+            return View(account);
         }
 
         // GET: Accounts/Create
         public IActionResult Create()
         {
-            IEnumerable<UserDTO> users = _userService.GetUsersWithoutAccount().Result;
+            // fetch the available users
+            IEnumerable<UserDTO> users = GetUsersWithoutAccount();
             ViewData["Userselect"] = new SelectList(users, nameof(UserDTO.Id), nameof(UserDTO.Username));
             ViewData["UsersAvailable"] = users.Count() > 0;
             return View();
@@ -73,13 +74,16 @@ namespace MVC.Controllers.Admin
             ModelState.Remove(nameof(UserDTO.Username));
             if (ModelState.IsValid)
             {
-                account = await _accountService.CreateAccount(account);
+                if (await _accountService.CreateAccount(account) == null)
+                {
+                    return BadRequest();
+                }
                 // redirect to the new account page
                 return RedirectToAction(nameof(Index));
             }
 
-            // otherwise return to the create page
-            IEnumerable<UserDTO> users = _userService.GetUsersWithoutAccount().Result;
+            // fetch the available users
+            IEnumerable<UserDTO> users = GetUsersWithoutAccount();
             ViewData["Userselect"] = new SelectList(users, nameof(UserDTO.Id), nameof(UserDTO.Username));
             ViewData["UsersAvailable"] = users.Count() > 0;
             return View(account);
@@ -92,14 +96,19 @@ namespace MVC.Controllers.Admin
             {
                 return NotFound();
             }
-            /*
-            var account = await _context.Accounts.FindAsync(id);
+
+            var account = await _accountService.GetAccountById(id.Value);
+
             if (account == null)
             {
-                return NotFound();
+                return BadRequest();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", account.UserId);*/
-            return View(/*account*/);
+
+            // fetch the available users
+            IEnumerable<UserDTO> users = await _userService.GetUsersWithoutAccount();
+            ViewData["Userselect"] = new SelectList(users, nameof(UserDTO.Id), nameof(UserDTO.Username));
+            ViewData["UsersAvailable"] = users.Count() > 0;
+            return View(account);
         }
 
         // POST: Accounts/Edit/5
@@ -107,35 +116,30 @@ namespace MVC.Controllers.Admin
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,Balance,CreatedAt,UpdatedAt")] Account account)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,Balance,CreatedAt,UpdatedAt")] AccountDTO account)
         {
-            if (id != account.Id)
+            if (id != account.AccountId)
             {
                 return NotFound();
             }
 
-            /*if (ModelState.IsValid)
+            //remove the UserName from the model state
+            ModelState.Remove(nameof(UserDTO.Username));
+            if (ModelState.IsValid)
             {
-                try
+                if (await _accountService.UpdateAccount(account) == null)
                 {
-                    _context.Update(account);
-                    await _context.SaveChangesAsync();
+                       return BadRequest();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AccountExists(account.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                RedirectToAction(nameof(Index));
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", account.UserId);*/
-            return View(/*account*/);
+
+            // fetch the available users
+            IEnumerable<UserDTO> users = await _userService.GetUsersWithoutAccount();
+            ViewData["Userselect"] = new SelectList(users, nameof(UserDTO.Id), nameof(UserDTO.Username));
+            ViewData["UsersAvailable"] = users.Count() > 0;
+            return View(account);
         }
 
         // GET: Accounts/Delete/5
@@ -145,16 +149,15 @@ namespace MVC.Controllers.Admin
             {
                 return NotFound();
             }
-            /*
-            var account = await _context.Accounts
-                .Include(a => a.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            
+            var account = await _accountService.GetAccountById(id.Value);
+
             if (account == null)
             {
-                return NotFound();
-            }*/
+                return BadRequest();
+            }
 
-            return View(/*account*/);
+            return View(account);
         }
 
         // POST: Accounts/Delete/5
@@ -162,19 +165,25 @@ namespace MVC.Controllers.Admin
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            /*var account = await _context.Accounts.FindAsync(id);
-            if (account != null)
+            if (await _accountService.DeleteAccount(id))
             {
-                _context.Accounts.Remove(account);
+                return RedirectToAction(nameof(Index));
             }
-
-            await _context.SaveChangesAsync();*/
-            return RedirectToAction(/*nameof(Index)*/);
+            return BadRequest();
         }
 
-        private bool AccountExists(int id)
+        private IEnumerable<UserDTO> GetUsersWithoutAccount()
         {
-            return true /*_context.Accounts.Any(e => e.Id == id)*/;
+            return _userService.GetUsersWithoutAccount().Result;
+        }
+
+        private async Task<IEnumerable<UserDTO>> GetUsersWithoutAccountAsync(int userId) {
+            // fetch the available users
+            IEnumerable<UserDTO> users = await _userService.GetUsersWithoutAccount();
+            // fetch the current user
+            UserDTO userDTO = await _userService.GetUser(userId);
+            // add the current user to the list of available users
+            return users.Append(userDTO);
         }
     }
 }

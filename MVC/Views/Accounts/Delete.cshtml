@@ -1,4 +1,4 @@
-﻿@model DAL.Models.Account
+﻿@model DTO.AccountDTO
 
 @{
     ViewData["Title"] = "Delete";
@@ -12,10 +12,10 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
+            @Html.DisplayNameFor(model => model.UserName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Email)
+            @Html.DisplayFor(model => model.UserName)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Balance)
@@ -23,22 +23,10 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Balance)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
-        </dd>
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="AccountId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>

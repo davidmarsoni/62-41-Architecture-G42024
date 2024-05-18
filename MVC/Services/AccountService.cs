@@ -2,6 +2,7 @@
 using DTO;
 using MVC.Services.Interfaces;
 using QS = MVC.Services.QuerySnippet.QuerySnippet;
+using SQS = MVC.Services.QuerySnippet.StandardQuerySet;
 using System.Net;
 using System.Text.Json;
 
@@ -17,44 +18,51 @@ namespace MVC.Services
             _client = client;
         }
 
-        public async Task<AccountDTO> GetAccountById(int id)
+        public async Task<AccountDTO?> GetAccountById(int id)
         {
-            throw new NotImplementedException();
+            return await SQS.Get<AccountDTO>(_client, $"{_baseUrl}/{id}");
         }
 
-        public async Task<IEnumerable<AccountDTO>> GetAllAccounts()
+        public async Task<IEnumerable<AccountDTO>?> GetAllAccounts()
         {
-            HttpResponseMessage? httpResponse = await QS.QueryOnURL(_client, _baseUrl);
-            if (httpResponse == null)
-            { return null; }
-            var responseBody = await httpResponse.Content.ReadAsStringAsync();
-            var accounts = JsonSerializer.Deserialize<List<AccountDTO>>(responseBody, QS.JsonSerializerOpt);
-            return accounts;
+            return await SQS.GetAll<AccountDTO>(_client, $"{_baseUrl}");
         }
 
-        public async Task<AccountDTO> CreateAccount(AccountDTO accountDTO)
+        public async Task<AccountDTO?> CreateAccount(AccountDTO accountDTO)
         {
-            var response = await _client.PostAsJsonAsync(_baseUrl, accountDTO);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsStringAsync();
-            if (response.StatusCode == HttpStatusCode.Created)
+            HttpResponseMessage? httpResponse = await QS.PostOnUrl(_client, _baseUrl, accountDTO);
+            if (httpResponse != null && httpResponse.StatusCode == HttpStatusCode.Created)
             {
-                return JsonSerializer.Deserialize<AccountDTO>(
-                                       responseBody, options: new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                String responseBody = await httpResponse.Content.ReadAsStringAsync();
+                return QS.JsonDeserialize<AccountDTO>(responseBody);
             } else
             {
                 return null;
             }
         }
 
-        public async Task<AccountDTO> UpdateAccount(AccountDTO accountDTO)
+        public async Task<AccountDTO?> UpdateAccount(AccountDTO accountDTO)
         {
-            throw new NotImplementedException();
+            HttpResponseMessage? httpResponse = await QS.PutOnUrl(_client, $"{_baseUrl}/{accountDTO.AccountId}", accountDTO);
+            if (httpResponse != null && httpResponse.StatusCode == HttpStatusCode.OK)
+            {
+                String responseBody = await httpResponse.Content.ReadAsStringAsync();
+                return QS.JsonDeserialize<AccountDTO>(responseBody);
+            } else
+            {
+                return null;
+            }
         }
 
-        public async Task DeleteAccount(int id)
+        public async Task<Boolean> DeleteAccount(int id)
         {
-            throw new NotImplementedException();
+            HttpResponseMessage? httpResponse = await QS.DeleteOnUrl(_client, $"{_baseUrl}/{id}");
+            if (httpResponse != null && httpResponse.StatusCode != HttpStatusCode.NoContent)
+            {
+                Console.WriteLine($"DeleteAccount failed with status code: { httpResponse.StatusCode}");
+                return false;
+            }
+            return true;
         }
     }
 }
