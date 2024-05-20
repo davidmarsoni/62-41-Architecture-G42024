@@ -18,6 +18,7 @@ namespace WebApplication1
 
             builder.Services.AddHttpClient<IAccountService, AccountService>();
             builder.Services.AddHttpClient<IUserService, UserService>();
+            builder.Services.AddHttpClient<IConversionService, ConversionService>();
 
             var app = builder.Build();
 

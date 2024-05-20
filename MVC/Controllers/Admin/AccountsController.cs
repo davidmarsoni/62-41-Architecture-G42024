@@ -13,6 +13,7 @@ using MVC.Services;
 using System.Collections;
 using DTO;
 using MVC.Models;
+using MVC.Controllers.Util;
 
 namespace MVC.Controllers.Admin
 {
@@ -32,7 +33,12 @@ namespace MVC.Controllers.Admin
         // GET: Accounts
         public async Task<IActionResult> Index()
         {
-            return View(await _accountService.GetAllAccounts());
+            IEnumerable<AccountDTO>? accounts = await _accountService.GetAllAccounts();
+            if (accounts == null) {
+                ToastrUtil.ToastrError(this, "Unable to fetch accounts, please contact support");
+                return Redirect("/");
+            }
+            return View(accounts);
         }
 
         // GET: Accounts/Details/5
@@ -40,16 +46,16 @@ namespace MVC.Controllers.Admin
         {
             if (id == null)
             {
-                return NotFound();
+                return idNotProvided(); 
             }
 
             var account = await _accountService.GetAccountById(id.Value);
 
             if (account == null)
             {
-                return RedirectToAction("Index", "Error");
+                return accountNotFound();
             }
-            
+
             return View(account);
         }
 
@@ -68,7 +74,7 @@ namespace MVC.Controllers.Admin
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,Balance,CreatedAt,UpdatedAt")] AccountDTO account)
+        public async Task<IActionResult> Create([Bind("UserId,Balance")] AccountDTO account)
         {
             // remove the UserName from the model state
             ModelState.Remove(nameof(UserDTO.Username));
@@ -76,9 +82,11 @@ namespace MVC.Controllers.Admin
             {
                 if (await _accountService.CreateAccount(account) == null)
                 {
-                    return BadRequest();
+                    ToastrUtil.ToastrError(this, "Unable to create account");
+                    return new EmptyResult();
                 }
                 // redirect to the new account page
+                ToastrUtil.ToastrSuccess(this, "Account successfully created");
                 return RedirectToAction(nameof(Index));
             }
 
@@ -94,20 +102,15 @@ namespace MVC.Controllers.Admin
         {
             if (id == null)
             {
-                return NotFound();
+                return idNotProvided();
             }
 
             var account = await _accountService.GetAccountById(id.Value);
 
             if (account == null)
             {
-                return BadRequest();
+                return accountNotFound();
             }
-
-            // fetch the available users
-            IEnumerable<UserDTO> users = await _userService.GetUsersWithoutAccount();
-            ViewData["Userselect"] = new SelectList(users, nameof(UserDTO.Id), nameof(UserDTO.Username));
-            ViewData["UsersAvailable"] = users.Count() > 0;
             return View(account);
         }
 
@@ -116,29 +119,25 @@ namespace MVC.Controllers.Admin
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,Balance,CreatedAt,UpdatedAt")] AccountDTO account)
+        public async Task<IActionResult> Edit(int id, [Bind("AccountId,UserId,Balance")] AccountDTO account)
         {
-            if (id != account.AccountId)
-            {
-                return NotFound();
+            if (id != account.AccountId) {
+                ToastrUtil.ToastrError(this, "An error has occured with the edit of accounts, please contact support");
+                return new EmptyResult();
             }
 
             //remove the UserName from the model state
-            ModelState.Remove(nameof(UserDTO.Username));
             if (ModelState.IsValid)
             {
-                if (await _accountService.UpdateAccount(account) == null)
+                if (!await _accountService.UpdateAccount(account))
                 {
-                       return BadRequest();
+                    ToastrUtil.ToastrError(this, "Account update failed");
+                    return RedirectToAction(nameof(Index));
                 }
-                RedirectToAction(nameof(Index));
+                ToastrUtil.ToastrSuccess(this, "Account successfully updated");
                 return RedirectToAction(nameof(Index));
             }
 
-            // fetch the available users
-            IEnumerable<UserDTO> users = await _userService.GetUsersWithoutAccount();
-            ViewData["Userselect"] = new SelectList(users, nameof(UserDTO.Id), nameof(UserDTO.Username));
-            ViewData["UsersAvailable"] = users.Count() > 0;
             return View(account);
         }
 
@@ -147,14 +146,14 @@ namespace MVC.Controllers.Admin
         {
             if (id == null)
             {
-                return NotFound();
+                return idNotProvided();
             }
             
             var account = await _accountService.GetAccountById(id.Value);
 
             if (account == null)
             {
-                return BadRequest();
+                return accountNotFound();
             }
 
             return View(account);
@@ -167,9 +166,11 @@ namespace MVC.Controllers.Admin
         {
             if (await _accountService.DeleteAccount(id))
             {
+                ToastrUtil.ToastrSuccess(this, "Account successfully deleted");
                 return RedirectToAction(nameof(Index));
             }
-            return BadRequest();
+            ToastrUtil.ToastrError(this, "Account deletion failed");
+            return RedirectToAction(nameof(Delete), id);
         }
 
         private IEnumerable<UserDTO> GetUsersWithoutAccount()
@@ -177,13 +178,14 @@ namespace MVC.Controllers.Admin
             return _userService.GetUsersWithoutAccount().Result;
         }
 
-        private async Task<IEnumerable<UserDTO>> GetUsersWithoutAccountAsync(int userId) {
-            // fetch the available users
-            IEnumerable<UserDTO> users = await _userService.GetUsersWithoutAccount();
-            // fetch the current user
-            UserDTO userDTO = await _userService.GetUser(userId);
-            // add the current user to the list of available users
-            return users.Append(userDTO);
+        private IActionResult idNotProvided() {
+            ToastrUtil.ToastrError(this, "Id was not provided");
+            return RedirectToAction(nameof(Index));
+        }
+
+        private IActionResult accountNotFound() {
+            ToastrUtil.ToastrError(this, "Account not found");
+            return RedirectToAction(nameof(Index));
         }
     }
 }

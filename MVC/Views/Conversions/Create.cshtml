@@ -1,4 +1,4 @@
-﻿@model DAL.Models.Conversion
+﻿@model DTO.ConversionDTO
 
 @{
     ViewData["Title"] = "Create";
@@ -13,14 +13,14 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="ConversionName" class="control-label"></label>
+                <input asp-for="ConversionName" class="form-control" />
+                <span asp-validation-for="ConversionName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Value" class="control-label"></label>
-                <input asp-for="Value" class="form-control" />
-                <span asp-validation-for="Value" class="text-danger"></span>
+                <label asp-for="ConversionValue" class="control-label"></label>
+                <input asp-for="ConversionValue" class="form-control" />
+                <span asp-validation-for="ConversionValue" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

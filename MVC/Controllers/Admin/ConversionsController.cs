@@ -7,22 +7,33 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using DAL.Models;
+using MVC.Controllers.Util;
+using DTO;
+using MVC.Services.Interfaces;
 
 namespace MVC.Controllers.Admin
 {
     public class ConversionsController : Controller
     {
-        private readonly PrintOMatic_Context _context;
+        private readonly ILogger<AccountsController> _logger;
+        private readonly IConversionService _conversionService;
 
-        public ConversionsController(PrintOMatic_Context context)
+        public ConversionsController(ILogger<AccountsController> logger, IConversionService conversionService)
         {
-            _context = context;
+            _logger = logger;
+            _conversionService = conversionService;
         }
 
         // GET: Conversions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Conversions.ToListAsync());
+            IEnumerable<ConversionDTO>? conversions = await _conversionService.GetAllConversions();
+            if (conversions == null)
+            {
+                ToastrUtil.ToastrError(this, "Unable to fetch conversions, please contact support");
+                return Redirect("/");
+            }
+            return View(conversions);
         }
 
         // GET: Conversions/Details/5
@@ -30,14 +41,14 @@ namespace MVC.Controllers.Admin
         {
             if (id == null)
             {
-                return NotFound();
+                return idNotProvided();
             }
 
-            var conversion = await _context.Conversions
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var conversion = await _conversionService.GetConversionById(id.Value);
+
             if (conversion == null)
             {
-                return NotFound();
+                return conversionNotFound();
             }
 
             return View(conversion);
@@ -54,12 +65,17 @@ namespace MVC.Controllers.Admin
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Value")] Conversion conversion)
+        public async Task<IActionResult> Create([Bind("ConversionName, ConversionValue")] ConversionDTO conversion)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(conversion);
-                await _context.SaveChangesAsync();
+                if (await _conversionService.CreateConversion(conversion) == null)
+                {
+                    ToastrUtil.ToastrError(this, "Unable to create conversion");
+                    return new EmptyResult();
+                }
+                // redirect to the new conversion page
+                ToastrUtil.ToastrSuccess(this, "Conversion successfully created");
                 return RedirectToAction(nameof(Index));
             }
             return View(conversion);
@@ -70,15 +86,16 @@ namespace MVC.Controllers.Admin
         {
             if (id == null)
             {
-                return NotFound();
+                return idNotProvided();
             }
 
-            var conversion = await _context.Conversions.FindAsync(id);
-            if (conversion == null)
+            var account = await _conversionService.GetConversionById(id.Value);
+
+            if (account == null)
             {
-                return NotFound();
+                return conversionNotFound();
             }
-            return View(conversion);
+            return View(account);
         }
 
         // POST: Conversions/Edit/5
@@ -86,33 +103,26 @@ namespace MVC.Controllers.Admin
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Value")] Conversion conversion)
+        public async Task<IActionResult> Edit(int id, [Bind("ConversionId,ConversionName,ConversionValue")] ConversionDTO conversion)
         {
-            if (id != conversion.Id)
+            if (id != conversion.ConversionId)
             {
-                return NotFound();
+                ToastrUtil.ToastrError(this, "An error has occured with the edit of conversions, please contact support");
+                return new EmptyResult();
             }
 
+            //remove the UserName from the model state
             if (ModelState.IsValid)
             {
-                try
+                if (!await _conversionService.UpdateConversion(conversion))
                 {
-                    _context.Update(conversion);
-                    await _context.SaveChangesAsync();
+                    ToastrUtil.ToastrError(this, "Conversion update failed");
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ConversionExists(conversion.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                ToastrUtil.ToastrSuccess(this, "Conversion successfully updated");
                 return RedirectToAction(nameof(Index));
             }
+
             return View(conversion);
         }
 
@@ -121,17 +131,17 @@ namespace MVC.Controllers.Admin
         {
             if (id == null)
             {
-                return NotFound();
+                return idNotProvided();
             }
 
-            var conversion = await _context.Conversions
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (conversion == null)
+            var account = await _conversionService.GetConversionById(id.Value);
+
+            if (account == null)
             {
-                return NotFound();
+                return conversionNotFound();
             }
 
-            return View(conversion);
+            return View(account);
         }
 
         // POST: Conversions/Delete/5
@@ -139,19 +149,25 @@ namespace MVC.Controllers.Admin
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var conversion = await _context.Conversions.FindAsync(id);
-            if (conversion != null)
+            if (await _conversionService.DeleteConversion(id))
             {
-                _context.Conversions.Remove(conversion);
+                ToastrUtil.ToastrSuccess(this, "Conversion successfully deleted");
+                return RedirectToAction(nameof(Index));
             }
+            ToastrUtil.ToastrError(this, "Conversion deletion failed");
+            return RedirectToAction(nameof(Delete), id);
+        }
 
-            await _context.SaveChangesAsync();
+        private IActionResult idNotProvided()
+        {
+            ToastrUtil.ToastrError(this, "Id was not provided");
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ConversionExists(int id)
+        private IActionResult conversionNotFound()
         {
-            return _context.Conversions.Any(e => e.Id == id);
+            ToastrUtil.ToastrError(this, "Account not found");
+            return RedirectToAction(nameof(Index));
         }
     }
 }

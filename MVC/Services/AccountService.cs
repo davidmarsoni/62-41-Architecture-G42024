@@ -30,39 +30,17 @@ namespace MVC.Services
 
         public async Task<AccountDTO?> CreateAccount(AccountDTO accountDTO)
         {
-            HttpResponseMessage? httpResponse = await QS.PostOnUrl(_client, _baseUrl, accountDTO);
-            if (httpResponse != null && httpResponse.StatusCode == HttpStatusCode.Created)
-            {
-                String responseBody = await httpResponse.Content.ReadAsStringAsync();
-                return QS.JsonDeserialize<AccountDTO>(responseBody);
-            } else
-            {
-                return null;
-            }
+            return await SQS.Post<AccountDTO?>(_client, _baseUrl, accountDTO);
         }
 
-        public async Task<AccountDTO?> UpdateAccount(AccountDTO accountDTO)
+        public async Task<Boolean> UpdateAccount(AccountDTO accountDTO)
         {
-            HttpResponseMessage? httpResponse = await QS.PutOnUrl(_client, $"{_baseUrl}/{accountDTO.AccountId}", accountDTO);
-            if (httpResponse != null && httpResponse.StatusCode == HttpStatusCode.OK)
-            {
-                String responseBody = await httpResponse.Content.ReadAsStringAsync();
-                return QS.JsonDeserialize<AccountDTO>(responseBody);
-            } else
-            {
-                return null;
-            }
+            return await SQS.PutNoReturn(_client, $"{_baseUrl}/{accountDTO.AccountId}", accountDTO);
         }
 
         public async Task<Boolean> DeleteAccount(int id)
         {
-            HttpResponseMessage? httpResponse = await QS.DeleteOnUrl(_client, $"{_baseUrl}/{id}");
-            if (httpResponse != null && httpResponse.StatusCode != HttpStatusCode.NoContent)
-            {
-                Console.WriteLine($"DeleteAccount failed with status code: { httpResponse.StatusCode}");
-                return false;
-            }
-            return true;
+            return await SQS.Delete(_client, $"{_baseUrl}/{id}") != null;
         }
     }
 }
