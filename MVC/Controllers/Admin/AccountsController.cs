@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using DAL;
-using DAL.Models;
 using MVC.Services.Interfaces;
-using MVCProject.Controllers;
-using MVC.Services;
-using System.Collections;
 using DTO;
-using MVC.Models;
 using MVC.Controllers.Util;
 
 namespace MVC.Controllers.Admin
