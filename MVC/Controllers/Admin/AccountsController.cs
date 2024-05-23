@@ -53,7 +53,7 @@ namespace MVC.Controllers.Admin
         {
             // fetch the available users
             IEnumerable<UserDTO> users = GetUsersWithoutAccount();
-            ViewData["Userselect"] = new SelectList(users, nameof(UserDTO.Id), nameof(UserDTO.Username));
+            ViewData["Userselect"] = new SelectList(users, nameof(UserDTO.UserId), nameof(UserDTO.Username));
             ViewData["UsersAvailable"] = users.Count() > 0;
             return View();
         }
@@ -81,7 +81,7 @@ namespace MVC.Controllers.Admin
 
             // fetch the available users
             IEnumerable<UserDTO> users = GetUsersWithoutAccount();
-            ViewData["Userselect"] = new SelectList(users, nameof(UserDTO.Id), nameof(UserDTO.Username));
+            ViewData["Userselect"] = new SelectList(users, nameof(UserDTO.UserId), nameof(UserDTO.Username));
             ViewData["UsersAvailable"] = users.Count() > 0;
             return View(account);
         }
@@ -162,9 +162,9 @@ namespace MVC.Controllers.Admin
             return RedirectToAction(nameof(Delete), id);
         }
 
-        private IEnumerable<UserDTO> GetUsersWithoutAccount()
+        private IEnumerable<UserDTO>? GetUsersWithoutAccount()
         {
-            return _userService.GetUsersWithoutAccount().Result;
+            return _userService.GetAllUsersWithoutAccount().Result;
         }
 
         private IActionResult idNotProvided() {

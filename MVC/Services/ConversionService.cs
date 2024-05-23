@@ -7,11 +7,12 @@ namespace MVC.Services
     public class ConversionService : IConversionService
     {
         private readonly HttpClient _client;
-        private readonly string _baseUrl = "https://localhost:7176/api/conversions";
+        private readonly string _baseUrl;
 
-        public ConversionService(HttpClient client)
+        public ConversionService(HttpClient client, IConfiguration configuration)
         {
             _client = client;
+            _baseUrl = configuration["WebAPI:BaseUrl"] + "/conversions";
         }
 
         public async Task<ConversionDTO?> GetConversionById(int id)

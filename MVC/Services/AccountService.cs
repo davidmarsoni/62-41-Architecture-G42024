@@ -11,11 +11,12 @@ namespace MVC.Services
     public class AccountService : IAccountService
     {
         private readonly HttpClient _client;
-        private readonly string _baseUrl = "https://localhost:7176/api/accounts";
+        private readonly string _baseUrl;
 
-        public AccountService(HttpClient client)
+        public AccountService(HttpClient client, IConfiguration configuration)
         {
             _client = client;
+            _baseUrl = configuration["WebAPI:BaseUrl"] + "/accounts";
         }
 
         public async Task<AccountDTO?> GetAccountById(int id)

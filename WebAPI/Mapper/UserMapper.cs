@@ -8,7 +8,7 @@ namespace WebApi.Mapper
         public static UserDTO toDTO (User user)
         {
             UserDTO userDTO = new UserDTO();
-            userDTO.Id = user.Id;
+            userDTO.UserId = user.Id;
             userDTO.Username = user.Username;
             userDTO.FirstName = user.FirstName;
             userDTO.LastName = user.LastName;
@@ -20,7 +20,7 @@ namespace WebApi.Mapper
         {
             User user = new User
             {
-                Id = userDTO.Id,
+                Id = userDTO.UserId,
                 Username = userDTO.Username,
                 FirstName = userDTO.FirstName,
                 LastName = userDTO.LastName,

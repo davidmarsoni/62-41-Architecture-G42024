@@ -6,13 +6,17 @@ using System.Text.Json;
 
 namespace MVC.Services.QuerySnippet
 {
+    /// <summary>
+    /// Static class to hold all the query snippets for the application's services.
+    /// Contains all the HTTP queries and JSON handling methods.
+    /// </summary>
     public static class QuerySnippet
     {
-        public static String GETALL = "GETALL";
-        public static String GET = "GET";
-        public static String POST = "POST";
-        public static String PUT = "PUT";
-        public static String DELETE = "DELETE";
+        public static readonly String GETALL = "GETALL";
+        public static readonly String GET = "GET";
+        public static readonly String POST = "POST";
+        public static readonly String PUT = "PUT";
+        public static readonly String DELETE = "DELETE";
 
         #region HTTP Queries
 
@@ -35,20 +39,31 @@ namespace MVC.Services.QuerySnippet
             return await httpClient.DeleteAsync(url);
         }
 
-        #endregion
-
-        #region HTTP Response Handling
-
+        /// <summary>
+        /// Handles the HTTP response and deserializes the JSON content if the response is successful.
+        /// </summary>
+        /// <typeparam name="T">The type to deserialize the JSON content into.</typeparam>
+        /// <param name="httpResponse">The HTTP response message.</param>
+        /// <param name="originalOperation">The original operation name.</param>
+        /// <returns>The deserialized object if the response is successful; otherwise, the default value of the type.</returns>
         public static T? HttpResponseHandling<T>(HttpResponseMessage? httpResponse, string originalOperation)
         {
-            if (isHttpResponseMessageSuccess(httpResponse, originalOperation)) {
+            if (isHttpResponseMessageSuccess(httpResponse, originalOperation))
+            {
                 String responseBody = httpResponse.Content.ReadAsStringAsync().Result;
                 return JsonDeserialize<T>(responseBody);
             }
             return default;
         }
 
-        public static Boolean isHttpResponseMessageSuccess(HttpResponseMessage? httpResponse, string originalOperation) {
+        /// <summary>
+        /// Checks if the HTTP response message indicates a successful response.
+        /// </summary>
+        /// <param name="httpResponse">The HTTP response message.</param>
+        /// <param name="originalOperation">The original operation name (logging).</param>
+        /// <returns>True if the response is successful; otherwise, false.</returns>
+        public static Boolean isHttpResponseMessageSuccess(HttpResponseMessage? httpResponse, string originalOperation)
+        {
             try
             {
                 httpResponse.EnsureSuccessStatusCode();

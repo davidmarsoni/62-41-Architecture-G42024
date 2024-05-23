@@ -1,63 +1,49 @@
 ﻿using DTO;
 using MVC.Services.Interfaces;
 using System.Text.Json;
+using SQS = MVC.Services.QuerySnippet.StandardQuerySet;
 
 namespace MVC.Services
 {
     public class UserService : IUserService
     {
         private readonly HttpClient _client;
-        private readonly string _baseUrl = "https://localhost:7176/api/users";
+        private readonly string _baseUrl;
 
-        public UserService(HttpClient client)
+        public UserService(HttpClient client, IConfiguration configuration)
         {
             _client = client;
+            _baseUrl = configuration["WebAPI:BaseUrl"] + "/users";
         }
 
-        public Task<UserDTO> CreateUser(UserDTO userDTO)
+        public async Task<UserDTO?> GetUserById(int id)
         {
-            throw new NotImplementedException();
+            return await SQS.Get<UserDTO>(_client, $"{_baseUrl}/{id}");
         }
 
-        public Task<UserDTO> DeleteUser(int id)
+        public async Task<IEnumerable<UserDTO>?> GetAllUsers()
         {
-            throw new NotImplementedException();
+            return await SQS.GetAll<UserDTO>(_client, _baseUrl);
         }
 
-        public Task<UserDTO> GetUser(int id)
+        public async Task<IEnumerable<UserDTO>?> GetAllUsersWithoutAccount()
         {
-            throw new NotImplementedException();
+            return await SQS.GetAll<UserDTO>(_client, $"{_baseUrl}/NoAccount");
         }
 
-        public async Task<IEnumerable<UserDTO>> GetUsers()
+        public async Task<UserDTO?> CreateUser(UserDTO userDTO)
         {
-            var response = await _client.GetAsync(_baseUrl);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsStringAsync();
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            var users = JsonSerializer.Deserialize<List<UserDTO>>(responseBody, options);
-            return users;
+            return await SQS.Post<UserDTO?>(_client, _baseUrl, userDTO);
         }
 
-        public async Task<IEnumerable<UserDTO>> GetUsersWithoutAccount()
+        public async Task<Boolean> UpdateUser(UserDTO userDTO)
         {
-            var response = await _client.GetAsync(_baseUrl + "/NoAccount");
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsStringAsync();
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            var users = JsonSerializer.Deserialize<List<UserDTO>>(responseBody, options);
-            return users;
+            return await SQS.PutNoReturn(_client, $"{_baseUrl}/{userDTO.UserId}", userDTO);
         }
 
-        public Task<UserDTO> UpdateUser(int id, UserDTO userDTO)
+        public async Task<Boolean> DeleteUser(int id)
         {
-            throw new NotImplementedException();
+            return await SQS.Delete(_client, $"{_baseUrl}/{id}");
         }
     }
 }

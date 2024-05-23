@@ -4,10 +4,10 @@ namespace MVC.Services.Interfaces
 {
     public interface IGroupService
     {
-        public List<GroupDTO> GetGroups();
-        public GroupDTO GetGroup(int id);
-        public GroupDTO CreateGroup(GroupDTO groupDTO);
-        public GroupDTO UpdateGroup(int id, GroupDTO groupDTO);
-        public GroupDTO DeleteGroup(int id);
+        public Task<GroupDTO?> GetGroupById(int id);
+        public Task<IEnumerable<GroupDTO>?> GetAllGroups();
+        public Task<GroupDTO?> CreateGroup(GroupDTO accountDTO);
+        public Task<Boolean> UpdateGroup(GroupDTO accountDTO);
+        public Task<Boolean> DeleteGroup(int id);
     }
 }
