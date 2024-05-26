@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
@@ -13,27 +9,27 @@ using MVC.Services.Interfaces;
 
 namespace MVC.Controllers.Admin
 {
-    public class UsersController : Controller
+    public class TransactionHistoriesController : Controller
     {
-        private readonly ILogger<UsersController> _logger;
-        private readonly IUserService _userService;
+        private readonly ILogger<TransactionHistoriesController> _logger;
+        private readonly ITransactionHistoryService _transactionHistoryService;
 
-        public UsersController(ILogger<UsersController> logger, IUserService userService)
+        public TransactionHistoriesController(ILogger<TransactionHistoriesController> logger, ITransactionHistoryService transactionHistoryService)
         {
             _logger = logger;
-            _userService = userService;
+            _transactionHistoryService = transactionHistoryService;
         }
 
         // GET: Groups
         public async Task<IActionResult> Index()
         {
-            IEnumerable<UserDTO>? groups = await _userService.GetAllUsers();
-            if (groups == null)
+            IEnumerable<TransactionHistoryDTO>? transactionHistories = await _transactionHistoryService.GetAllTransactionHistories();
+            if (transactionHistories == null)
             {
-                ToastrUtil.ToastrError(this, "Unable to fetch users, please contact support");
+                ToastrUtil.ToastrError(this, "Unable to fetch transactions, please contact support");
                 return Redirect("/");
             }
-            return View(groups);
+            return View(transactionHistories);
         }
 
         // GET: Groups/Details/5
@@ -44,11 +40,11 @@ namespace MVC.Controllers.Admin
                 return idNotProvided();
             }
 
-            var group = await _userService.GetUserById(id.Value);
+            var group = await _transactionHistoryService.GetTransactionHistoryById(id.Value);
 
             if (group == null)
             {
-                return userNotFound();
+                return transactionHistoryNotFound();
             }
 
             return View(group);
@@ -65,20 +61,20 @@ namespace MVC.Controllers.Admin
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Username,LastName,FirstName,Gender,Address,Email,IsDeleted")] UserDTO user)
+        public async Task<IActionResult> Create([Bind("GroupId,Name,Acronym,IsDeleted")] TransactionHistoryDTO transactionHistory)
         {
             if (ModelState.IsValid)
             {
-                if (await _userService.CreateUser(user) == null)
+                if (await _transactionHistoryService.CreateTransactionHistory(transactionHistory) == null)
                 {
-                    ToastrUtil.ToastrError(this, "Unable to create user");
-                    return View(user);
+                    ToastrUtil.ToastrError(this, "Unable to create group");
+                    return View(transactionHistory);
                 }
                 // redirect to the new account page
-                ToastrUtil.ToastrSuccess(this, "User successfully created");
+                ToastrUtil.ToastrSuccess(this, "Transaction history successfully created");
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(transactionHistory);
         }
 
         // GET: Groups/Edit/5
@@ -89,11 +85,11 @@ namespace MVC.Controllers.Admin
                 return idNotProvided();
             }
 
-            var group = await _userService.GetUserById(id.Value);
+            var group = await _transactionHistoryService.GetTransactionHistoryById(id.Value);
 
             if (group == null)
             {
-                return userNotFound();
+                return transactionHistoryNotFound();
             }
             return View(group);
         }
@@ -103,27 +99,27 @@ namespace MVC.Controllers.Admin
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,Username,LastName,FirstName,Gender,Address,Email,IsDeleted")] UserDTO group)
+        public async Task<IActionResult> Edit(int id, [Bind("GroupId,Name,Acronym,IsDeleted")] TransactionHistoryDTO transactionHistory)
         {
-            if (id != group.UserId)
+            if (id != transactionHistory.TransactionHistoryId)
             {
-                ToastrUtil.ToastrError(this, "An error has occured with the edit of users, please contact support");
-                return View(group);
+                ToastrUtil.ToastrError(this, "An error has occured with the edit of groups, please contact support");
+                return View(transactionHistory);
             }
 
             //remove the UserName from the model state
             if (ModelState.IsValid)
             {
-                if (!await _userService.UpdateUser(group))
+                if (!await _transactionHistoryService.UpdateTransactionHistory(transactionHistory))
                 {
-                    ToastrUtil.ToastrError(this, "User update failed");
+                    ToastrUtil.ToastrError(this, "Transaction history update failed");
                     return RedirectToAction(nameof(Index));
                 }
-                ToastrUtil.ToastrSuccess(this, "User successfully updated");
+                ToastrUtil.ToastrSuccess(this, "Transaction history successfully updated");
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(group);
+            return View(transactionHistory);
         }
 
         // GET: Groups/Delete/5
@@ -134,11 +130,11 @@ namespace MVC.Controllers.Admin
                 return idNotProvided();
             }
 
-            var group = await _userService.GetUserById(id.Value);
+            var group = await _transactionHistoryService.GetTransactionHistoryById(id.Value);
 
             if (group == null)
             {
-                return userNotFound();
+                return transactionHistoryNotFound();
             }
 
             return View(group);
@@ -149,12 +145,12 @@ namespace MVC.Controllers.Admin
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (await _userService.DeleteUser(id))
+            if (await _transactionHistoryService.DeleteTransactionHistory(id))
             {
-                ToastrUtil.ToastrSuccess(this, "User successfully deleted");
+                ToastrUtil.ToastrSuccess(this, "Transaction history successfully deleted");
                 return RedirectToAction(nameof(Index));
             }
-            ToastrUtil.ToastrError(this, "User deletion failed");
+            ToastrUtil.ToastrError(this, "Transaction history deletion failed");
             return RedirectToAction(nameof(Delete), id);
         }
 
@@ -164,9 +160,9 @@ namespace MVC.Controllers.Admin
             return RedirectToAction(nameof(Index));
         }
 
-        private IActionResult userNotFound()
+        private IActionResult transactionHistoryNotFound()
         {
-            ToastrUtil.ToastrError(this, "User not found");
+            ToastrUtil.ToastrError(this, "Transaction history not found");
             return RedirectToAction(nameof(Index));
         }
     }

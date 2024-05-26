@@ -7,12 +7,17 @@ namespace WebApi.Mapper
     {
         public static UserDTO toDTO (User user)
         {
-            UserDTO userDTO = new UserDTO();
-            userDTO.UserId = user.Id;
-            userDTO.Username = user.Username;
-            userDTO.FirstName = user.FirstName;
-            userDTO.LastName = user.LastName;
-            userDTO.Email = user.Email;
+            UserDTO userDTO = new UserDTO
+            {
+                UserId = user.Id,
+                Username = user.Username,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Gender = user.Gender,
+                Address = user.Address,
+                IsDeleted = user.IsDeleted
+            };
             return userDTO;
         }
 
@@ -24,7 +29,10 @@ namespace WebApi.Mapper
                 Username = userDTO.Username,
                 FirstName = userDTO.FirstName,
                 LastName = userDTO.LastName,
-                Email = userDTO.Email
+                Email = userDTO.Email,
+                Gender = userDTO.Gender,
+                Address = userDTO.Address,
+                IsDeleted = userDTO.IsDeleted
             };
             return user;
         }

@@ -10,7 +10,7 @@ namespace MVC.Controllers
     {
         private readonly ILogger<FacultiesController> _logger;
         private readonly IUserService _userService;
-        private readonly IGroupService groupService;
+        private readonly IGroupService _groupService;
 
         public FacultiesController(ILogger<FacultiesController> logger)
         {
