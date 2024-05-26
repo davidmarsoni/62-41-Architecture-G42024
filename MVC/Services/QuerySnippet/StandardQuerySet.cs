@@ -55,14 +55,7 @@ namespace MVC.Services.QuerySnippet
         public static async Task<Boolean> PutNoReturn<T>(HttpClient httpClient, String url, T obj)
         {
             HttpResponseMessage? httpResponseMessage = await QS.PutOnUrl(httpClient, url, obj);
-            if (QS.isHttpResponseMessageSuccess(httpResponseMessage, QS.PUT))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return QS.isHttpResponseMessageSuccess(httpResponseMessage, QS.PUT);
         }
 
         /// <summary>
@@ -74,13 +67,7 @@ namespace MVC.Services.QuerySnippet
         public static async Task<Boolean> Delete(HttpClient httpClient, String url)
         {
             HttpResponseMessage? httpResponseMessage = await QS.DeleteOnUrl(httpClient, url);
-            if (QS.isHttpResponseMessageSuccess(httpResponseMessage, QS.DELETE))
-            {
-                return true;
-            } else {
-
-                return false;
-            }
+            return QS.isHttpResponseMessageSuccess(httpResponseMessage, QS.DELETE);
         }
     }
 }

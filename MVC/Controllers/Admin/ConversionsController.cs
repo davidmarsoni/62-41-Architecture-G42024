@@ -64,7 +64,7 @@ namespace MVC.Controllers.Admin
                 if (await _conversionService.CreateConversion(conversion) == null)
                 {
                     ToastrUtil.ToastrError(this, "Unable to create conversion");
-                    return new EmptyResult();
+                    return View(conversion);
                 }
                 // redirect to the new conversion page
                 ToastrUtil.ToastrSuccess(this, "Conversion successfully created");
@@ -100,7 +100,7 @@ namespace MVC.Controllers.Admin
             if (id != conversion.ConversionId)
             {
                 ToastrUtil.ToastrError(this, "An error has occured with the edit of conversions, please contact support");
-                return new EmptyResult();
+                return View(conversion);
             }
 
             //remove the UserName from the model state

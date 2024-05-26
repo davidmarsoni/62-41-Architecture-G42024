@@ -72,7 +72,7 @@ namespace MVC.Controllers.Admin
                 if (await _accountService.CreateAccount(account) == null)
                 {
                     ToastrUtil.ToastrError(this, "Unable to create account");
-                    return new EmptyResult();
+                    return View(account);
                 }
                 // redirect to the new account page
                 ToastrUtil.ToastrSuccess(this, "Account successfully created");
@@ -112,7 +112,7 @@ namespace MVC.Controllers.Admin
         {
             if (id != account.AccountId) {
                 ToastrUtil.ToastrError(this, "An error has occured with the edit of accounts, please contact support");
-                return new EmptyResult();
+                return View(account);
             }
 
             //remove the UserName from the model state

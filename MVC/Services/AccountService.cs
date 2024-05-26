@@ -41,7 +41,7 @@ namespace MVC.Services
 
         public async Task<Boolean> DeleteAccount(int id)
         {
-            return await SQS.Delete(_client, $"{_baseUrl}/{id}") != null;
+            return await SQS.Delete(_client, $"{_baseUrl}/{id}");
         }
     }
 }

@@ -28,26 +28,5 @@ namespace WebApi.Mapper
             };
             return user;
         }
-
-        // map list of groups
-        public static UserDTO addGroupsCollection(User user, UserDTO userDTO)
-        {
-            userDTO.GroupDTOs = new List<GroupDTO>();
-            foreach (Group group in user.Groups)
-            {
-                userDTO.GroupDTOs.Add(GroupMapper.toDTO(group));
-            }
-            return userDTO;
-        }
-
-        public static User addGroupsCollection(UserDTO userDTO, User user)
-        {
-            // no need to create new list of users -> ICollection create itself
-            foreach (GroupDTO groupDTO in userDTO.GroupDTOs)
-            {
-                user.Groups.Add(GroupMapper.toDAL(groupDTO));
-            }
-            return user;
-        }
     }
 }
