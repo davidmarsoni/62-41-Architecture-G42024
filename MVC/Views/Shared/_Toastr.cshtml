@@ -1,37 +1,7 @@
 ﻿@if (TempData["ToastrMessage"] != null && TempData["ToastrTitle"] != null)
 {
-<script type="text/javascript">
-    @if (TempData["ToastrType"] != null)
-        {
-        switch (@TempData["ToastrType"])
-            {
-                case "success":
-                    <text>
-                    toastr.success('@TempData["ToastrMessage"]', '@TempData["ToastrTitle"]');
-                                </text>
-                break;
-                    case "info":
-                    <text>
-                    toastr.info('@TempData["ToastrMessage"]', '@TempData["ToastrTitle"]');
-                                </text>
-                break;
-                    case "warning":
-                    <text>
-                    toastr.warning('@TempData["ToastrMessage"]', '@TempData["ToastrTitle"]');
-                                </text>
-                break;
-                    case "error":
-                    <text>
-                    toastr.error('@TempData["ToastrMessage"]', '@TempData["ToastrTitle"]');
-                                </text>
-                break;
-            }
-        }
-        else
-        {
-            <text>
-                toastr.info('@TempData["ToastrMessage"]', '@TempData["ToastrTitle"]');
-            </text>    
-        }
+    <script type="text/javascript">
+        var toastrType = '@TempData["ToastrType"]' ?? "info";
+        toastr[toastrType]('@TempData["ToastrMessage"]', '@TempData["ToastrTitle"]');
     </script>
 }

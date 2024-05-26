@@ -1,9 +1,13 @@
-﻿namespace DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DTO
 {
     public class AccountDTO
     {
         // account fields
         public int AccountId { get; set; }
+        [Required(ErrorMessage = "Balance is required")]
+        [Range(0, 1000, ErrorMessage = "Please enter a value between {1} and {2}")]
         public decimal Balance { get; set; }
 
         // user fields
