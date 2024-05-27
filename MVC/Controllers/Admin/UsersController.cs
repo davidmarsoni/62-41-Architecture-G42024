@@ -81,7 +81,7 @@ namespace MVC.Controllers.Admin
             return View(user);
         }
 
-        // GET: Groups/Edit/5
+        // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,32 +89,32 @@ namespace MVC.Controllers.Admin
                 return idNotProvided();
             }
 
-            var group = await _userService.GetUserById(id.Value);
+            var user = await _userService.GetUserById(id.Value);
 
-            if (group == null)
+            if (user == null)
             {
                 return userNotFound();
             }
-            return View(group);
+            return View(user);
         }
 
-        // POST: Groups/Edit/5
+        // POST: Users/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,Username,LastName,FirstName,Gender,Address,Email,IsDeleted")] UserDTO group)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId,Username,LastName,FirstName,Gender,Address,Email,IsDeleted")] UserDTO user)
         {
-            if (id != group.UserId)
+            if (id != user.UserId)
             {
                 ToastrUtil.ToastrError(this, "An error has occured with the edit of users, please contact support");
-                return View(group);
+                return View(user);
             }
 
             //remove the UserName from the model state
             if (ModelState.IsValid)
             {
-                if (!await _userService.UpdateUser(group))
+                if (!await _userService.UpdateUser(user))
                 {
                     ToastrUtil.ToastrError(this, "User update failed");
                     return RedirectToAction(nameof(Index));
@@ -123,10 +123,10 @@ namespace MVC.Controllers.Admin
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(group);
+            return View(user);
         }
 
-        // GET: Groups/Delete/5
+        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,15 +134,16 @@ namespace MVC.Controllers.Admin
                 return idNotProvided();
             }
 
-            var group = await _userService.GetUserById(id.Value);
+            var user = await _userService.GetUserById(id.Value);
 
-            if (group == null)
+            if (user == null)
             {
                 return userNotFound();
             }
 
-            return View(group);
+            return View(user);
         }
+
 
         // POST: Groups/Delete/5
         [HttpPost, ActionName("Delete")]
