@@ -7,7 +7,9 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <form method="get" asp-action="Create" class="d-inline-block">
+        <button type="submit" class="btn btn-outline-success">Create New</button>
+    </form>
 </p>
 <table class="table">
     <thead>
@@ -21,7 +23,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.IsDeleted)
             </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -37,9 +39,15 @@
                 @Html.DisplayFor(modelItem => item.IsDeleted)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.GroupId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.GroupId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.GroupId">Delete</a>
+                <form method="get" asp-action="Edit" asp-route-id="@item.GroupId" class="d-inline-block">
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </form>
+                <form method="get" asp-action="Details" asp-route-id="@item.GroupId" class="d-inline-block">
+                    <button type="submit" class="btn btn-secondary">Details</button>
+                </form>
+                <form method="get" asp-action="Delete" asp-route-id="@item.GroupId" class="d-inline-block">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
             </td>
         </tr>
 }

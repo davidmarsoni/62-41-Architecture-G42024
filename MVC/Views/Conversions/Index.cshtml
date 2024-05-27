@@ -5,9 +5,10 @@
 }
 
 <h1>Index</h1>
-
 <p>
-    <a asp-action="Create">Create New</a>
+    <form method="get" asp-action="Create" class="d-inline-block">
+        <button type="submit" class="btn btn-outline-success">Create New</button>
+    </form>
 </p>
 <table class="table">
     <thead>
@@ -18,24 +19,32 @@
             <th>
                 @Html.DisplayNameFor(model => model.ConversionValue)
             </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ConversionName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ConversionValue)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ConversionId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ConversionId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ConversionId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ConversionName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ConversionValue)
+                </td>
+                <td>
+                    <form method="get" asp-action="Edit" asp-route-id="@item.ConversionId" class="d-inline-block">
+                        <button type="submit" class="btn btn-primary">Edit</button>
+                    </form>
+                    <form method="get" asp-action="Details" asp-route-id="@item.ConversionId" class="d-inline-block">
+                        <button type="submit" class="btn btn-secondary">Details</button>
+                    </form>
+                    <form method="get" asp-action="Delete" asp-route-id="@item.ConversionId" class="d-inline-block">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
