@@ -91,89 +91,6 @@ namespace MVC.Controllers.Admin
             return View(transactionHistory);
         }
 
-        // GET: Groups/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return idNotProvided();
-            }
-
-            var transactionHistory = await _transactionHistoryService.GetTransactionHistoryById(id.Value);
-
-            if (transactionHistory == null)
-            {
-                return transactionHistoryNotFound();
-            }
-
-            await setupFields();
-            return View(transactionHistory);
-        }
-
-        // POST: Groups/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TransactionHistoryId, AccountId, Src, TransactionType, Amount, ConversionId")] TransactionHistoryDTO transactionHistory)
-        {
-            if (id != transactionHistory.TransactionHistoryId)
-            {
-                ToastrUtil.ToastrError(this, "An error has occured with the edit of transactionHistories, please contact support");
-                return View(transactionHistory);
-            }
-
-            //remove the UserName from the model state
-            if (ModelState.IsValid)
-            {
-                // formalize the conversion
-                await conversionFormalizationAsync(transactionHistory);
-
-                if (!await _transactionHistoryService.UpdateTransactionHistory(transactionHistory))
-                {
-                    ToastrUtil.ToastrError(this, "Transaction history update failed");
-                    return RedirectToAction(nameof(Index));
-                }
-                ToastrUtil.ToastrSuccess(this, "Transaction history successfully updated");
-                return RedirectToAction(nameof(Index));
-            }
-
-            await setupFields();
-            return View(transactionHistory);
-        }
-
-        // GET: Groups/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return idNotProvided();
-            }
-
-            var group = await _transactionHistoryService.GetTransactionHistoryById(id.Value);
-
-            if (group == null)
-            {
-                return transactionHistoryNotFound();
-            }
-
-            return View(group);
-        }
-
-        // POST: Groups/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (await _transactionHistoryService.DeleteTransactionHistory(id))
-            {
-                ToastrUtil.ToastrSuccess(this, "Transaction history successfully deleted");
-                return RedirectToAction(nameof(Index));
-            }
-            ToastrUtil.ToastrError(this, "Transaction history deletion failed");
-            return RedirectToAction(nameof(Delete), id);
-        }
-
         private IActionResult idNotProvided()
         {
             ToastrUtil.ToastrError(this, "Id was not provided");
@@ -197,7 +114,7 @@ namespace MVC.Controllers.Admin
         public async Task fetchAllAccountAsync()
         {
             IEnumerable<AccountDTO>? accounts = await _accountService.GetAllAccounts();
-            ViewData["AccountsSelect"] = new SelectList(accounts, nameof(AccountDTO.UserId), nameof(AccountDTO.UserName));
+            ViewData["AccountsSelect"] = new SelectList(accounts, nameof(AccountDTO.AccountId), nameof(AccountDTO.UserName));
             ViewData["AccountsAvailable"] = accounts?.Count() > 0;
         }
 

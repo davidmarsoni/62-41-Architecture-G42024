@@ -5,7 +5,7 @@ namespace WebApi.Mapper
 {
     public class TransactionHistoryMapper
     {
-        public static TransactionHistoryDTO toDTO(TransactionHistory transactionHistory)
+        public static TransactionHistoryDTO toDTO(TransactionHistory transactionHistory, User? user)
         {
             TransactionHistoryDTO transactionHistoryDTO = new TransactionHistoryDTO
             {
@@ -17,6 +17,7 @@ namespace WebApi.Mapper
                 TransactionType = transactionHistory.TransactionType,
                 ConversionName = transactionHistory.ConversionName,
                 ConversionValue = transactionHistory.ConversionValue,
+                AccountUsername = user?.Username
             };
             return transactionHistoryDTO;
         }

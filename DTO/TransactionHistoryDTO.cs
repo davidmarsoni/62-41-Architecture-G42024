@@ -6,6 +6,7 @@ namespace DTO
     {
         public int TransactionHistoryId { get; set; }
         public int AccountId { get; set; }
+        public string? AccountUsername { get; set; }
         public DateTime DateTime { get; set; }
         public Src Src { get; set; }
         public TransactionType TransactionType { get; set; }

@@ -15,6 +15,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.AccountUsername)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.TransactionType)
             </th>
             <th>
@@ -39,6 +42,9 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.AccountUsername)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.TransactionType)
             </td>
             <td>
@@ -57,14 +63,8 @@
                 @Html.DisplayFor(modelItem => item.ConversionValue)
             </td>
             <td>
-                <form method="get" asp-action="Edit" asp-route-id="@item.TransactionHistoryId" class="d-inline-block">
-                    <button type="submit" class="btn btn-primary">Edit</button>
-                </form>
-                    <form method="get" asp-action="Details" asp-route-id="@item.TransactionHistoryId" class="d-inline-block">
+                <form method="get" asp-action="Details" asp-route-id="@item.TransactionHistoryId" class="d-inline-block">
                     <button type="submit" class="btn btn-secondary">Details</button>
-                </form>
-                    <form method="get" asp-action="Delete" asp-route-id="@item.TransactionHistoryId" class="d-inline-block">
-                    <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </td>
         </tr>

@@ -6,7 +6,7 @@ namespace DAL.Models
     {
         public int Id { get; set; }
         public int AccountId { get; set; }
-        public Account Account { get; set; } = null!;
+        public Account? Account { get; set; } = null!;
         public DateTime DateTime { get; set; }
         public Src Src { get; set; }
         public TransactionType TransactionType { get; set; }

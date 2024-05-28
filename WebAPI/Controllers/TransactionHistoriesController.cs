@@ -33,7 +33,11 @@ namespace WebApi.Controllers
             {
                 foreach (TransactionHistory transactionHistory in transactionHistories)
                 {
-                    result.Add(TransactionHistoryMapper.toDTO(transactionHistory));
+                    // find the user associated with the account
+                    Account account = await _context.Accounts.FindAsync(transactionHistory.AccountId);
+                    User user = await _context.Users.FindAsync(account.UserId);
+                    // convert the transaction history to a DTO
+                    result.Add(TransactionHistoryMapper.toDTO(transactionHistory, user));
                 }
             }
             return result;
@@ -50,59 +54,13 @@ namespace WebApi.Controllers
                 return NotFound();
             }
 
-            TransactionHistoryDTO transactionHistoryDTO = TransactionHistoryMapper.toDTO(transactionHistory);
+            // find the user associated with the account
+            Account account = await _context.Accounts.FindAsync(transactionHistory.AccountId);
+            User user = await _context.Users.FindAsync(account.UserId);
+            // convert the transaction history to a DTO
+            TransactionHistoryDTO transactionHistoryDTO = TransactionHistoryMapper.toDTO(transactionHistory, user);
 
             return transactionHistoryDTO;
-        }
-
-        // PUT: api/TransactionHistories/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTransactionHistory(int id, TransactionHistoryDTO transactionHistoryDTO)
-        {
-            if (id != transactionHistoryDTO.TransactionHistoryId)
-            {
-                return BadRequest();
-            }
-
-            TransactionHistory transactionHistory;
-
-            IActionResult result = await ValidateConversion(transactionHistoryDTO);
-            // check if the statuscode is not 200
-            if (result.GetType() != typeof(OkResult))
-            {
-                return result;
-            }
-
-            try
-            {
-                transactionHistory = TransactionHistoryMapper.toDAL(transactionHistoryDTO);
-            }
-            catch (Exception e)
-            {
-                return StatusCode(500);
-            }
-
-            _context.Entry(transactionHistory).State = EntityState.Modified;
-
-            try
-            {
-                transactionHistory.DateTime = DateTime.Now;
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TransactionHistoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
 
         // POST: api/TransactionHistories
@@ -133,22 +91,6 @@ namespace WebApi.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTransactionHistory", new { id = transactionHistory.Id }, transactionHistory);
-        }
-
-        // DELETE: api/TransactionHistories/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTransactionHistory(int id)
-        {
-            var transactionHistory = await _context.TransactionHistory.FindAsync(id);
-            if (transactionHistory == null)
-            {
-                return NotFound();
-            }
-
-            _context.TransactionHistory.Remove(transactionHistory);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
         private bool TransactionHistoryExists(int id)
