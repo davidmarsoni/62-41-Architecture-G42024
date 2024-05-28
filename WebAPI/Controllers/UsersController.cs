@@ -34,8 +34,8 @@ namespace WebApi.Controllers
         }
 
         // GET: api/Users/NoAccount
-        [HttpGet("NoAccount")]
-        public async Task<ActionResult<List<UserDTO>>> GetUsersNoAccount()
+        [HttpGet("ActiveNoAccount")]
+        public async Task<ActionResult<List<UserDTO>>> GetUsersActiveNoAccount()
         {
             // get all users that do not have an account
             // first get all accounts users id
@@ -59,6 +59,26 @@ namespace WebApi.Controllers
         {
             // get all users that are active
             IEnumerable<User> users = await _context.Users.Where(u => !u.IsDeleted).ToListAsync();
+            List<UserDTO> result = new List<UserDTO>();
+            if (users != null && users.Count() > 0)
+            {
+                foreach (User user in users)
+                {
+                    result.Add(UserMapper.toDTO(user));
+                }
+            }
+            return result;
+        }
+
+        // GET: api/Users/Active
+        [HttpGet("ActiveWithAccount")]
+        public async Task<ActionResult<List<UserDTO>>> GetUsersActiveWithAccount()
+        {
+            // get all users that do not have an account
+            // first get all accounts users id
+            IEnumerable<int> accountUsersId = await _context.Accounts.Select(a => a.UserId).ToListAsync();
+            // second get all users that are in the accountUsersId list and that are not deleted
+            IEnumerable<User> users = await _context.Users.Where(u => accountUsersId.Contains(u.Id) && !u.IsDeleted).ToListAsync();
             List<UserDTO> result = new List<UserDTO>();
             if (users != null && users.Count() > 0)
             {

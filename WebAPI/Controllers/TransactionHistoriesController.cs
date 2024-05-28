@@ -67,6 +67,13 @@ namespace WebApi.Controllers
 
             TransactionHistory transactionHistory;
 
+            IActionResult result = await ValidateConversion(transactionHistoryDTO);
+            // check if the statuscode is not 200
+            if (result.GetType() != typeof(OkResult))
+            {
+                return result;
+            }
+
             try
             {
                 transactionHistory = TransactionHistoryMapper.toDAL(transactionHistoryDTO);
@@ -80,6 +87,7 @@ namespace WebApi.Controllers
 
             try
             {
+                transactionHistory.DateTime = DateTime.Now;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -104,6 +112,13 @@ namespace WebApi.Controllers
         {
             TransactionHistory transactionHistory;
 
+            ActionResult result = (ActionResult) await ValidateConversion(transactionHistoryDTO);
+            // check if the statuscode is not 200
+            if (result.GetType() != typeof(OkResult))
+            {
+                return result;
+            }
+
             try
             {
                 transactionHistory = TransactionHistoryMapper.toDAL(transactionHistoryDTO);
@@ -113,6 +128,7 @@ namespace WebApi.Controllers
                 return StatusCode(500);
             }
 
+            transactionHistory.DateTime = DateTime.Now;
             _context.TransactionHistory.Add(transactionHistory);
             await _context.SaveChangesAsync();
 
@@ -139,5 +155,26 @@ namespace WebApi.Controllers
         {
             return _context.TransactionHistory.Any(e => e.Id == id);
         }
+
+        #region Common Methods
+
+        private async Task<IActionResult> ValidateConversion(TransactionHistoryDTO transactionHistoryDTO)
+        {
+            // if conversion name is provided, then conversion value must be provided
+            if (transactionHistoryDTO.ConversionName != null && transactionHistoryDTO.ConversionValue != null)
+            {
+                return Ok();
+            }
+            else if (transactionHistoryDTO.ConversionName == null && transactionHistoryDTO.ConversionValue == null)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        #endregion
     }
 }

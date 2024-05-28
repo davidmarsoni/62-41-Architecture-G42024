@@ -26,9 +26,14 @@ namespace MVC.Services
             return await SQS.GetAll<UserDTO>(_client, _baseUrl);
         }
 
-        public async Task<IEnumerable<UserDTO>?> GetAllUsersWithoutAccount()
+        public async Task<IEnumerable<UserDTO>?> GetAllUsersActiveWithoutAccount()
         {
-            return await SQS.GetAll<UserDTO>(_client, $"{_baseUrl}/NoAccount");
+            return await SQS.GetAll<UserDTO>(_client, $"{_baseUrl}/ActiveNoAccount");
+        }
+
+        public async Task<IEnumerable<UserDTO>?> GetAllUsersActiveWithAccount()
+        {
+            return await SQS.GetAll<UserDTO>(_client, $"{_baseUrl}/ActiveWithAccount");
         }
 
         public async Task<UserDTO?> CreateUser(UserDTO userDTO)

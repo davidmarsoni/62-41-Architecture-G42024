@@ -7,22 +7,21 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <form method="get" asp-action="Create" class="d-inline-block">
+        <button type="submit" class="btn btn-outline-success">Create New</button>
+    </form>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.TransactionHistoryId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateTime)
+                @Html.DisplayNameFor(model => model.TransactionType)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Src)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TransactionType)
+                @Html.DisplayNameFor(model => model.DateTime)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Amount)
@@ -40,16 +39,13 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.TransactionHistoryId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateTime)
+                @Html.DisplayFor(modelItem => item.TransactionType)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Src)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TransactionType)
+                @Html.DisplayFor(modelItem => item.DateTime)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Amount)
@@ -61,9 +57,15 @@
                 @Html.DisplayFor(modelItem => item.ConversionValue)
             </td>
             <td>
-               <a asp-action="Edit" asp-route-id="@item.TransactionHistoryId">Edit</a> |
-               <a asp-action="Details" asp-route-id="@item.TransactionHistoryId">Details</a> |
-               <a asp-action="Delete" asp-route-id="@item.TransactionHistoryId">Delete</a>
+                <form method="get" asp-action="Edit" asp-route-id="@item.TransactionHistoryId" class="d-inline-block">
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </form>
+                    <form method="get" asp-action="Details" asp-route-id="@item.TransactionHistoryId" class="d-inline-block">
+                    <button type="submit" class="btn btn-secondary">Details</button>
+                </form>
+                    <form method="get" asp-action="Delete" asp-route-id="@item.TransactionHistoryId" class="d-inline-block">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
             </td>
         </tr>
 }

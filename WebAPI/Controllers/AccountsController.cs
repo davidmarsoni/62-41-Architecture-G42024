@@ -107,6 +107,16 @@ namespace WebApi.Controllers
             {
                    return BadRequest();
             }
+            // check if the user exists
+            if (!_context.Users.Any(e => e.Id == accountDTO.UserId))
+            {
+                return NotFound();
+            }
+            // check if an account already exist for the user
+            if (_context.Accounts.Any(e => e.UserId == accountDTO.UserId))
+            {
+                return Conflict();
+            }
             try
             {
                 account = AccountMapper.toDAL(accountDTO);

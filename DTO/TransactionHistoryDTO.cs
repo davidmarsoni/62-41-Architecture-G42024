@@ -10,8 +10,8 @@ namespace DTO
         public Src Src { get; set; }
         public TransactionType TransactionType { get; set; }
         public decimal Amount { get; set; }
+        public int? ConversionId { get; set; }
         public string? ConversionName { get; set; }
         public decimal? ConversionValue { get; set; }
-
     }
 }

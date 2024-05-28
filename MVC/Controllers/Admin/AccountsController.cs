@@ -49,12 +49,10 @@ namespace MVC.Controllers.Admin
         }
 
         // GET: Accounts/Create
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
             // fetch the available users
-            IEnumerable<UserDTO> users = GetUsersWithoutAccount();
-            ViewData["Userselect"] = new SelectList(users, nameof(UserDTO.UserId), nameof(UserDTO.Username));
-            ViewData["UsersAvailable"] = users.Count() > 0;
+            await fetchAllUsersAsync();
             return View();
         }
 
@@ -80,9 +78,7 @@ namespace MVC.Controllers.Admin
             }
 
             // fetch the available users
-            IEnumerable<UserDTO> users = GetUsersWithoutAccount();
-            ViewData["Userselect"] = new SelectList(users, nameof(UserDTO.UserId), nameof(UserDTO.Username));
-            ViewData["UsersAvailable"] = users.Count() > 0;
+            await fetchAllUsersAsync();
             return View(account);
         }
 
@@ -162,11 +158,6 @@ namespace MVC.Controllers.Admin
             return RedirectToAction(nameof(Delete), id);
         }
 
-        private IEnumerable<UserDTO>? GetUsersWithoutAccount()
-        {
-            return _userService.GetAllUsersWithoutAccount().Result;
-        }
-
         private IActionResult idNotProvided() {
             ToastrUtil.ToastrError(this, "Id was not provided");
             return RedirectToAction(nameof(Index));
@@ -176,5 +167,16 @@ namespace MVC.Controllers.Admin
             ToastrUtil.ToastrError(this, "Account not found");
             return RedirectToAction(nameof(Index));
         }
+
+        #region Common Methods
+
+        public async Task fetchAllUsersAsync()
+        {
+            IEnumerable<UserDTO>? users = await _userService.GetAllUsersActiveWithoutAccount();
+            ViewData["UsersSelect"] = new SelectList(users, nameof(UserDTO.UserId), nameof(UserDTO.Username));
+            ViewData["UsersAvailable"] = users?.Count() > 0;
+        }
+
+        #endregion
     }
 }
