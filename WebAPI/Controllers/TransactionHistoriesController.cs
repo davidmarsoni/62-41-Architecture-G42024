@@ -9,6 +9,8 @@ using DAL;
 using DAL.Models;
 using DTO;
 using WebApi.Mapper;
+using WebApi.ExternalServices;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApi.Controllers
 {
@@ -69,7 +71,16 @@ namespace WebApi.Controllers
         public async Task<ActionResult<TransactionHistory>> PostTransactionHistory(TransactionHistoryDTO transactionHistoryDTO)
         {
             TransactionHistory transactionHistory;
+            Account? account;
 
+            // 1. check if the account exists
+            account = await _context.Accounts.FindAsync(transactionHistoryDTO.AccountId);
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            // 2. check if the conversion values are valid
             ActionResult result = (ActionResult) await ValidateConversion(transactionHistoryDTO);
             // check if the statuscode is not 200
             if (result.GetType() != typeof(OkResult))
@@ -86,10 +97,72 @@ namespace WebApi.Controllers
                 return StatusCode(500);
             }
 
+            // 3. beginning the transaction
+            Decimal amount = transactionHistory.Amount;
+            // dispatch the code treatment
+            switch (transactionHistory.Src)
+            {
+                case DAL.Classes.Src.Printer:
+                    // make sure the amount is negative
+                    if (amount > 0)
+                    {
+                        // if the amount is positive, we just make it negative
+                        amount = -amount;
+                    }
+                    // we check if the account has enough money
+                    if (account.Balance + amount < 0)
+                    {
+                        return BadRequest();
+                    }
+                    // push the transaction to the printer server
+                    PrinterSystemConnector printerSystemConnector = PrinterSystemConnector.getConnector();
+                    if (!printerSystemConnector.IsConnected())
+                    {
+                        if (!await printerSystemConnector.ConnectToPrinterServer())
+                        {
+                            return StatusCode(500);
+                        }
+                    }
+                    try
+                    {
+                        if (!await printerSystemConnector.PushTransactionOntoPrinterServer(transactionHistoryDTO))
+                        {
+                            throw new Exception("Unable to push transaction into print server");
+                        }
+                        // if the transaction is successful, we can continue and save the transaction into the database
+                    }
+                    catch (Exception e)
+                    {
+                        return StatusCode(500);
+                    }
+                    break;
+                default:
+                    // all transaction that are not printer related are considered as a simple transaction
+                    // check if the amount is positive for Src PayOnline, PaymentDB and Allocation (skip if the transactionType is CorrectCredit)
+                    if (
+                        transactionHistory.Src == DAL.Classes.Src.PayOnline 
+                        || transactionHistory.Src == DAL.Classes.Src.PaymentDB
+                        || (transactionHistory.Src == DAL.Classes.Src.Allocation
+                            && transactionHistory.TransactionType != DAL.Classes.TransactionType.CorrectCredit)
+                        )
+                    {
+                        if (amount < 0)
+                        {
+                            return BadRequest();
+                        }
+                    }
+                    break;
+            }
+            // add/substract the amount from the account
+            account.Balance += amount;
+            _context.Entry(account).State = EntityState.Modified;
+
             transactionHistory.DateTime = DateTime.Now;
             _context.TransactionHistory.Add(transactionHistory);
+
             await _context.SaveChangesAsync();
 
+            // if the transaction is successful, we can return the transaction history
             return CreatedAtAction("GetTransactionHistory", new { id = transactionHistory.Id }, transactionHistory);
         }
 

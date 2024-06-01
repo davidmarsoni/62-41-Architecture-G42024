@@ -28,7 +28,7 @@ namespace WebApi.Mapper
             {
                 Id = transactionHistoryDTO.TransactionHistoryId,
                 Amount = transactionHistoryDTO.Amount,
-                DateTime = transactionHistoryDTO.DateTime,
+                DateTime = (DateTime)(transactionHistoryDTO.DateTime == null ? DateTime.Now : transactionHistoryDTO.DateTime),
                 AccountId = transactionHistoryDTO.AccountId,
                 Src = transactionHistoryDTO.Src,
                 TransactionType = transactionHistoryDTO.TransactionType,

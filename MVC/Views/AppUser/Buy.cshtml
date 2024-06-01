@@ -1,0 +1,45 @@
+﻿@model AppUserBuyViewModel
+
+@{
+    ViewData["Title"] = "Buy";
+}
+
+
+<h1>Buy</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="AccountId" class="control-label">AccountUsername    </label>
+                <select asp-for="AccountId" class="form-control" asp-items="ViewBag.AccountsSelect"></select>
+                <span asp-validation-for="AccountId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConversionId" class="control-label">Conversion</label>
+                <select asp-for="ConversionId" class="form-control" asp-items="ViewBag.ConversionsSelect"></select>
+                <span asp-validation-for="ConversionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label">Quantity</label>
+                <input asp-for="Quantity" class="form-control" type="number" step="1" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <!-- hidden input to transmit conversionList (IEnumerable) -->
+            @if (ViewBag.AccountsAvailable && ViewBag.ConversionsAvailable)
+            {
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            }
+        </form>
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<img class="mt-3" src="https://cdn.thewirecutter.com/wp-content/media/2023/04/printers-2048px-09256-2x1-1.jpg?width=2048&quality=75&crop=2:1&auto=webp" style="width:100%; height:300px;" />

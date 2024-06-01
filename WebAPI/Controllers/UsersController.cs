@@ -33,7 +33,7 @@ namespace WebApi.Controllers
             return result;
         }
 
-        // GET: api/Users/NoAccount
+        // GET: api/Users/ActiveNoAccount
         [HttpGet("ActiveNoAccount")]
         public async Task<ActionResult<List<UserDTO>>> GetUsersActiveNoAccount()
         {

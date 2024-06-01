@@ -4,6 +4,7 @@ using DAL;
 using DAL.Models;
 using DTO;
 using WebApi.Mapper;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApi.Controllers
 {
@@ -61,6 +62,11 @@ namespace WebApi.Controllers
         public async Task<IActionResult> PutAccount(int id, AccountDTO accountDTO)
         {
             if (id != accountDTO.AccountId)
+            {
+                return BadRequest();
+            }
+
+            if (!Validator.TryValidateObject(accountDTO, new ValidationContext(accountDTO), null, true))
             {
                 return BadRequest();
             }
