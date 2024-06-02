@@ -32,6 +32,7 @@ namespace MVC.Controllers
 
             if (groups == null || users == null)
             {
+                ToastrUtil.ToastrError(this, "Unable to fetch groups or users, please contact support");
                 return RedirectToAction("Error", "Home");
             }
 
@@ -68,7 +69,7 @@ namespace MVC.Controllers
             }
 
             // Log the action
-            _logger.LogInformation("Added user with id {UserId} to selected users", userId);
+            ToastrUtil.ToastrSuccess(this, "User successfully added to selected users");
 
             // Return the updated view
             return RedirectToAction("Index");
@@ -80,6 +81,12 @@ namespace MVC.Controllers
             // Get the users from the group
             var users = await _userService.GetUsersByGroupId(groupId);
 
+            if(users == null)
+            {
+                ToastrUtil.ToastrError(this, "This group has no users or this group does not exist");
+                return BadRequest();
+            }
+
             // Add the users to the selected users
             foreach (var user in users)
             {
@@ -89,6 +96,7 @@ namespace MVC.Controllers
                 }
             }
 
+            ToastrUtil.ToastrSuccess(this, "Users of the goups successfully added to selected users");
             // Return the updated view
             return RedirectToAction("Index");
         }
@@ -97,18 +105,30 @@ namespace MVC.Controllers
         public IActionResult DeleteSelectedUser(int userId)
         {
             var user = _selectedUsers.Find(u => u.UserId == userId);
-            if (user != null)
+            if (user == null)
             {
-                _selectedUsers.Remove(user);
+                ToastrUtil.ToastrError(this, "User not found in selected users");
             }
 
+            _selectedUsers.Remove(user);
+            ToastrUtil.ToastrSuccess(this, "User successfully removed from selected users");
             return RedirectToAction("Index");
         }
+
 
         [HttpPost]
         public IActionResult ClearSelectedUsers()
         {
             _selectedUsers.Clear();
+            ToastrUtil.ToastrSuccess(this, "Selected users successfully cleared");
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult AddQuotaToSelectedUsers(int quota)
+        {
+            //TODO: Implement
+            ToastrUtil.ToastrError(this, "Not implemented");
             return RedirectToAction("Index");
         }
 
@@ -123,9 +143,12 @@ namespace MVC.Controllers
                return;
             }
 
+            ToastrUtil.ToastrSuccess(this, "User successfully added to selected users");
             var userViewModel = new UserViewModel(user,account,groups.ToList());
 
             _selectedUsers.Add(userViewModel);
         }
+
+
     }
 }
