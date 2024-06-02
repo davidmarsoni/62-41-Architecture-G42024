@@ -39,5 +39,10 @@ namespace MVC.Services
         {
             return await SQS.Delete(_client, $"{_baseUrl}/{id}");
         }
+
+        public async Task<IEnumerable<GroupDTO>?> GetGroupsByUserId(int userId)
+        {
+           return await SQS.Get<List<GroupDTO>>(_client, $"{_baseUrl}/User/{userId}");
+        }
     }
 }

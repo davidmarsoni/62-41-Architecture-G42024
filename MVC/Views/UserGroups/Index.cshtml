@@ -1,0 +1,47 @@
+﻿@model IEnumerable<DTO.UserGroupDTO>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <form method="get" asp-action="Create" class="d-inline-block">
+        <button type="submit" class="btn btn-outline-success">Create New</button>
+    </form>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+               Users
+            </th>
+            <th>
+                Groups
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Username)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GroupName)
+                </td>
+                <td>    
+                    <form method="get" asp-action="Details" asp-route-id="@item.UserGroupId" class="d-inline-block">
+                        <button type="submit" class="btn btn-secondary">Details</button>
+                    </form>
+                    <form method="get" asp-action="Delete" asp-route-id="@item.UserGroupId" class="d-inline-block">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -56,6 +56,25 @@ namespace WebApi.Controllers
             return accountDTO;
         }
 
+        // GET: api/Accounts/User/5
+        [HttpGet("User/{userId}")]
+        public async Task<ActionResult<AccountDTO>> GetAccountByUserId(int userId)
+        {
+            var account = await _context.Accounts.FirstOrDefaultAsync(a => a.UserId == userId);
+
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            // get the user associated with the account
+            User user = await _context.Users.FindAsync(account.UserId);
+
+            AccountDTO accountDTO = AccountMapper.toDTO(account, user);
+
+            return accountDTO;
+        }
+
         // PUT: api/Accounts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

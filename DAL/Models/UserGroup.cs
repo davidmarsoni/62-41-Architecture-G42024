@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Models
 {
-    public class User_Group
+    public class UserGroup
     {
+        public int Id { get; set; } 
         public int UserId { get; set; }
         public User User { get; set; } = null!;
         public int GroupId { get; set; }

@@ -90,6 +90,27 @@ namespace WebApi.Controllers
             return result;
         }
 
+        // GET: api/Users/Group/5
+        [HttpGet("Group/{groupId}")]
+        public async Task<ActionResult<List<UserDTO>>> GetUsersByGroupId(int groupId)
+        {
+            // get all active users that are in the group
+            var users = await _context.UserGroups
+                .Where(ug => ug.GroupId == groupId && !ug.User.IsDeleted)
+                .Select(ug => ug.User)
+                .ToListAsync();
+
+            List<UserDTO> result = new List<UserDTO>();
+            if (users != null && users.Count > 0)
+            {
+                foreach (User user in users)
+                {
+                    result.Add(UserMapper.toDTO(user));
+                }
+            }
+            return result;
+        }
+
         // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDTO>> GetUser(int id)

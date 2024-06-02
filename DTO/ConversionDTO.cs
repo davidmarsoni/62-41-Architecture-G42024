@@ -6,11 +6,11 @@ namespace DTO
     {
         public int ConversionId { get; set; }
 
-        [Required]
+        [Required (ErrorMessage = "An Conversion name is required")]
         [StringLength(100)]
-        public string ConversionName { get; set; }
+        public string ConversionName { get; set; } = string.Empty;
 
-        [Required]
+        [Required (ErrorMessage = "A conversion value is required")]
         [Range(0, double.MaxValue, ErrorMessage = "Please enter a value bigger than {1}")]
         public decimal ConversionValue { get; set; }
     }

@@ -12,7 +12,6 @@ namespace DTO
         public decimal Balance { get; set; }
 
         // user fields
-        [Required(ErrorMessage = "UserId is required")]
         public int UserId { get; set; }
         
         public string? UserName { get; set; }

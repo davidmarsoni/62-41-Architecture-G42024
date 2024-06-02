@@ -1,8 +1,68 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model MVC.Models.FacultiesViewModel
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Add Quota to Users";
 }
 
-<h1>TEST</h1>
+<h1>Add Quota to Users</h1>
+
+<form method="post" asp-action="AddSelectedGroup">
+    <div class="row d-flex align-items-stretch mt-3">
+        <!-- Group Selection Row -->
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="groupSelect" class="control-label">Select Group</label>
+               
+                <div class="input-group">
+                    <select id="groupSelect" class="form-select" name="groupId" asp-for="GroupId" asp-items="ViewBag.Groups"></select>
+
+                   
+                    <button type="submit" class="btn btn-primary btn-block" id="moveGroup">Add Group</button>
+                </div>
+                <span asp-validation-for="GroupId" class="text-danger"></span>
+            </div>
+        </div>
+       
+    </div>
+</form>
+
+<form method="post" asp-action="AddSelectedUser">
+    <div class="row d-flex align-items-stretch mt-3">
+        <!-- User Selection Row -->
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="userSelect" class="control-label">Select User</label>
+
+                <div class="input-group">
+                    <select id="userSelect" class="form-select" name="userId" asp-for="UserId" asp-items="ViewBag.Users"></select>
+                    <button type="submit" class="btn btn-primary btn-block" id="moveUser">Add User</button>
+                </div>
+                <span asp-validation-for="GroupId" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+</form>
+
+@Html.Partial("_ListOfUsers", Model.SelectedUsers)
+
+<div class="row mt-5">
+    <!-- Amount Field -->
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="amount">Quota to Add</label>
+            <input type="number" min="0" class="form-control" id="amount" name="amount" />
+            <span class="text-danger" id="amountValidation"></span>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-4">
+        <form method="post" asp-action="Submit">
+            <button type="submit" class="btn btn-primary">Add quota for the selected users</button>
+        </form>
+    </div>
+</div>
+
+
+

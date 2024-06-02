@@ -1,0 +1,64 @@
+﻿@model List<MVC.Models.UserViewModel>
+
+@{
+}
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>Users</th>
+            <th>Groups</th>
+            <th>Balance</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var user in Model)
+            {
+                if (user != null)
+                {
+                    <tr>
+                        <td>@user.DisplayName </td>
+                        <td>
+                            @if (@user.Groups != null)
+                            {
+                                foreach (var group in user.Groups)
+                                {
+                                    if (group != null && group.Name != null && group.Acronym != null)
+                                    {
+                                        <span>@group.Acronym</span>
+                                    }else if (group != null && group.Name != null)
+                                    {
+                                        <span>@group.Name</span>
+                                    }        
+                                }
+                            }
+                        </td>
+                        <td>
+                            @if (user.Balance != null)
+                            {
+                                <span>@user.Balance CHF</span>
+                            }
+                        </td>
+                        <td>
+                            <form method="post" asp-action="DeleteSelectedUser">
+                                <input type="hidden" name="userId" value="@user.UserId" />
+
+                                <button type="submit" class="btn btn-outline-danger">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+        <tr>
+            <td colspan="2">
+                <form method="post" asp-action="ClearSelectedUsers">
+                    <button type="submit" class="btn btn-danger">Clear All</button>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>

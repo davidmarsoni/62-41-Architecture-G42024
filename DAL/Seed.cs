@@ -29,13 +29,13 @@ namespace DAL
             context.Groups.Add(group);
 
             //try to add a user_group
-            var user_group = new User_Group
+            var user_group = new UserGroup
             {
                 User = user,
                 Group = group
             };
 
-            context.User_Groups.Add(user_group);
+            context.UserGroups.Add(user_group);
 
             //try add an account
             var account = new Account

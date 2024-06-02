@@ -27,13 +27,13 @@ namespace MVC.Controllers.Admin
         // GET: Groups
         public async Task<IActionResult> Index()
         {
-            IEnumerable<UserDTO>? groups = await _userService.GetAllUsers();
-            if (groups == null)
+            IEnumerable<UserDTO>? users = await _userService.GetAllUsers();
+            if (users == null)
             {
                 ToastrUtil.ToastrError(this, "Unable to fetch users, please contact support");
                 return Redirect("/");
             }
-            return View(groups);
+            return View(users);
         }
 
         // GET: Groups/Details/5
@@ -44,14 +44,14 @@ namespace MVC.Controllers.Admin
                 return idNotProvided();
             }
 
-            var group = await _userService.GetUserById(id.Value);
+            var user = await _userService.GetUserById(id.Value);
 
-            if (group == null)
+            if (user == null)
             {
                 return userNotFound();
             }
 
-            return View(group);
+            return View(user);
         }
 
         // GET: Groups/Create

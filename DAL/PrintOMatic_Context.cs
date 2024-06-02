@@ -10,7 +10,7 @@ namespace DAL
         public DbSet<TransactionHistory> TransactionHistory { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<User_Group> User_Groups { get; set; }
+        public DbSet<UserGroup> UserGroups { get; set; }
 
         public PrintOMatic_Context(DbContextOptions<PrintOMatic_Context> options) : base(options)
         {
@@ -29,7 +29,7 @@ namespace DAL
             modelBuilder.Entity<User>()
                 .HasMany(e => e.Groups)
                 .WithMany(e => e.Users)
-                .UsingEntity<User_Group>();
+                .UsingEntity<UserGroup>();
         }
 
         public override int SaveChanges()

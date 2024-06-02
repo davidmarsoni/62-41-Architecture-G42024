@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(PrintOMatic_Context))]
-    [Migration("20240526170518_initalCreate")]
+    [Migration("20240601155300_initalCreate")]
     partial class initalCreate
     {
         /// <inheritdoc />
@@ -168,19 +168,27 @@ namespace DAL.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("DAL.Models.User_Group", b =>
+            modelBuilder.Entity("DAL.Models.UserGroup", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("GroupId", "UserId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("User_Groups");
+                    b.ToTable("UserGroups");
                 });
 
             modelBuilder.Entity("DAL.Models.Account", b =>
@@ -205,7 +213,7 @@ namespace DAL.Migrations
                     b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("DAL.Models.User_Group", b =>
+            modelBuilder.Entity("DAL.Models.UserGroup", b =>
                 {
                     b.HasOne("DAL.Models.Group", "Group")
                         .WithMany("User_Groups")

@@ -43,5 +43,10 @@ namespace MVC.Services
         {
             return await SQS.Delete(_client, $"{_baseUrl}/{id}");
         }
+
+        public async Task<AccountDTO?> GetAccountByUserId(int userId)
+        {
+            return await SQS.Get<AccountDTO>(_client, $"{_baseUrl}/User/{userId}");
+        }
     }
 }

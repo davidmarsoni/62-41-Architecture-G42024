@@ -13,6 +13,9 @@ namespace DTO
         [StringLength(10, ErrorMessage = "Acronym must be between 1 and 10 characters", MinimumLength = 1)]
         public string? Acronym { get; set; }
 
+        [Required(ErrorMessage = "IsDeleted is required")]
         public bool IsDeleted { get; set; }
+
+        public string DisplayName => $"{Name} ({Acronym})";
     }
 }

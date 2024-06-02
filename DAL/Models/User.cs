@@ -14,6 +14,6 @@ namespace DAL.Models
         public bool IsDeleted { get; set; } = false!;
 
         public ICollection<Group> Groups { get;} = new List<Group>();
-        public ICollection<User_Group> User_Groups { get; } = new List<User_Group>();
+        public ICollection<UserGroup> User_Groups { get; } = new List<UserGroup>();
     }
 }
