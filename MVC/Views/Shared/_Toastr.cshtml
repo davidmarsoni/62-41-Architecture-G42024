@@ -1,7 +1,16 @@
-﻿@if (TempData["ToastrMessage"] != null && TempData["ToastrTitle"] != null)
+﻿@using System.Text.Json
+@using MVC.Controllers.Util
+
+@if (!string.IsNullOrEmpty(TempData["Toastrs"] as string))
 {
+    var toasts = JsonSerializer.Deserialize<List<Toastr>>(TempData["Toastrs"].ToString());
     <script type="text/javascript">
-        var toastrType = '@TempData["ToastrType"]' ?? "info";
-        toastr[toastrType]('@TempData["ToastrMessage"]', '@TempData["ToastrTitle"]');
+        @foreach (var toast in toasts)
+        {
+            var toastrType = toast.Type ?? "info";
+            <text>
+                toastr["@toastrType"]('@toast.Message', '@toast.Title');
+            </text>
+        }
     </script>
 }

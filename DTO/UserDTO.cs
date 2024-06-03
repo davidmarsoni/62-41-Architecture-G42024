@@ -31,6 +31,6 @@ namespace DTO
         [Required(ErrorMessage = "IsDeleted is required")]
         public bool IsDeleted { get; set; }
 
-        public string DisplayName => $"{FirstName} {LastName} ({Email})";
+        public string DisplayName => $"{FirstName} {LastName} ({Username})";
     }
 }

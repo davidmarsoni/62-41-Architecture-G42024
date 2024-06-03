@@ -25,7 +25,7 @@ namespace MVC.Models
         public List<GroupDTO> Groups { get; set; }
 
 
-        public string DisplayName => $"{FirstName} {LastName} ({Email})";
+        public string DisplayName => $"{FirstName} {LastName} ({Username})";
 
 
         public UserViewModel()

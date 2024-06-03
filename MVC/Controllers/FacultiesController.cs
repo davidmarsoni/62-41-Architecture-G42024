@@ -82,11 +82,12 @@ namespace MVC.Controllers
             // Add the user to the selected users
             if(!_selectedUsers.Exists(u => u.UserId == user.UserId))
             {
-                await AddUserToSelectedUsers(user);
+                Boolean flag = await AddUserToSelectedUsers(user);
+                if (flag)
+                {
+                    ToastrUtil.ToastrInfo(this, "User successfully added to selected users");
+                }
             }
-
-            // Log the action
-            ToastrUtil.ToastrInfo(this, "User successfully added to selected users");
 
             // Return the updated view
             return RedirectToAction("Index");
@@ -95,12 +96,14 @@ namespace MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSelectedGroup(int groupId)
         {
+            //get the group from the database for debugging purposes
+            var group = await _groupService.GetGroupById(groupId);
             // Get the users from the group
             var users = await _userService.GetUsersByGroupId(groupId);
 
             if(users == null)
             {
-                ToastrUtil.ToastrError(this, "This group has no users or this group does not exist");
+                ToastrUtil.ToastrError(this, "The group"+ group.Acronym + "does not contain any users");
                 return BadRequest();
             }
 
@@ -113,7 +116,8 @@ namespace MVC.Controllers
                 }
             }
 
-            ToastrUtil.ToastrInfo(this, "Users of the goups successfully added to selected users");
+            ToastrUtil.ToastrInfo(this, "User of the group successfully added to selected users");
+            
             // Return the updated view
             return RedirectToAction("Index");
         }
@@ -125,6 +129,7 @@ namespace MVC.Controllers
             if (user == null)
             {
                 ToastrUtil.ToastrError(this, "User not found in selected users");
+                return RedirectToAction("Index");
             }
 
             _selectedUsers.Remove(user);
@@ -142,7 +147,7 @@ namespace MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddQuotaToSelectedUsers([Bind("quota")] int quota)
+        public async Task<IActionResult> AddQuotaToSelectedUsers([Bind("quota")] decimal quota)
         {
             //Test if there is at least one user selected
             if (_selectedUsers.Count == 0)
@@ -187,7 +192,7 @@ namespace MVC.Controllers
             return View("ListOfUsersCheck", _selectedUsers);
         }
     
-        private async Task AddUserToSelectedUsers(UserDTO user)
+        private async Task<Boolean> AddUserToSelectedUsers(UserDTO user)
         {
             
             AccountDTO? account = await _accountService.GetAccountByUserId(user.UserId);
@@ -195,13 +200,14 @@ namespace MVC.Controllers
 
             if (account != null)
             {
-                ToastrUtil.ToastrInfo(this, "User successfully added to selected users");
                 var userViewModel = new UserViewModel(user, account, groups.ToList());
 
                 _selectedUsers.Add(userViewModel);
+                return true;
             }
             else { 
-                ToastrUtil.ToastrWarning(this, "User not added to selected users, account not found");
+                ToastrUtil.ToastrWarning(this, "User"+ user.Username + " does not have an account");
+                return false;
             }
         }
 
