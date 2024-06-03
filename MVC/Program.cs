@@ -22,6 +22,7 @@ namespace WebApplication1
             builder.Services.AddHttpClient<IGroupService, GroupService>();
             builder.Services.AddHttpClient<ITransactionHistoryService, TransactionHistoryService>();
             builder.Services.AddHttpClient<IUserGroupService, UserGroupService>();
+            builder.Services.AddHttpClient<ITransactionService, TransactionService>();
 
             var app = builder.Build();
 

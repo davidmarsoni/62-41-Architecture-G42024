@@ -24,20 +24,5 @@ namespace MVC.Services
         {
             return await SQS.Get<TransactionHistoryDTO>(_client, $"{_baseUrl}/{id}");
         }
-
-        public async Task<TransactionHistoryDTO?> CreateTransactionHistory(TransactionHistoryDTO accountDTO)
-        {
-            return await SQS.Post<TransactionHistoryDTO?>(_client, _baseUrl, accountDTO);
-        }
-
-        public async Task<Boolean> UpdateTransactionHistory(TransactionHistoryDTO accountDTO)
-        {
-            return await SQS.PutNoReturn(_client, $"{_baseUrl}/{accountDTO.TransactionHistoryId}", accountDTO);
-        }
-
-        public async Task<Boolean> DeleteTransactionHistory(int id)
-        {
-            return await SQS.Delete(_client, $"{_baseUrl}/{id}");
-        }
     }
 }

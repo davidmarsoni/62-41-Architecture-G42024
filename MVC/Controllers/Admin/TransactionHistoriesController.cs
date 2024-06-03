@@ -15,14 +15,16 @@ namespace MVC.Controllers.Admin
     {
         private readonly ILogger<TransactionHistoriesController> _logger;
         private readonly ITransactionHistoryService _transactionHistoryService;
+        private readonly ITransactionService _transactionService;
         private readonly IAccountService _accountService;
         private readonly IConversionService _conversionService;
         private IEnumerable<ConversionDTO>? _conversionDTOs;
 
-        public TransactionHistoriesController(ILogger<TransactionHistoriesController> logger, ITransactionHistoryService transactionHistoryService, IAccountService accountService, IConversionService conversionService)
+        public TransactionHistoriesController(ILogger<TransactionHistoriesController> logger, ITransactionHistoryService transactionHistoryService, ITransactionService transactionService, IAccountService accountService, IConversionService conversionService)
         {
             _logger = logger;
             _transactionHistoryService = transactionHistoryService;
+            _transactionService = transactionService;
             _accountService = accountService;
             _conversionService = conversionService;
         }
@@ -76,9 +78,9 @@ namespace MVC.Controllers.Admin
                 // formalize the conversion
                 await conversionFormalizationAsync(transactionHistory);
 
-                if (await _transactionHistoryService.CreateTransactionHistory(transactionHistory) == null)
+                if (!await _transactionService.PostTransaction(transactionHistory))
                 {
-                    ToastrUtil.ToastrError(this, "Unable to create transactionHistory");
+                    ToastrUtil.ToastrError(this, "Unable to handle the transaction");
                     await setupFields();
                     return View(transactionHistory);
                 }

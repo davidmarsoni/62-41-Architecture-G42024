@@ -1,6 +1,10 @@
-﻿using DTO;
+﻿using DAL.Classes;
+using DAL.Models;
+using DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Update;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 using MVC.Controllers.Util;
 using MVC.Models;
 using MVC.Services.Interfaces;
@@ -15,13 +19,15 @@ namespace MVC.Controllers
         private readonly IUserService _userService;
         private readonly IGroupService _groupService;
         private readonly IAccountService _accountService;
+        private readonly ITransactionService _transactionService;
         private static List<UserViewModel> _selectedUsers = new List<UserViewModel>();
 
-        public FacultiesController(ILogger<FacultiesController> logger, IUserService userService, IGroupService groupService, IAccountService accountService)
+        public FacultiesController(ILogger<FacultiesController> logger, IUserService userService, IGroupService groupService, IAccountService accountService, ITransactionService transactionService)
         {
             _userService = userService;
             _groupService = groupService;
             _accountService = accountService;
+            _transactionService = transactionService;
             _logger = logger;
         }
 
@@ -47,6 +53,17 @@ namespace MVC.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> ListOfUsersCheck()
+        { 
+            List<UserViewModel> _selectedUsersCopy = new List<UserViewModel>();
+            foreach (var user in _selectedUsers)
+            {
+                _selectedUsersCopy.Add(user);
+            }
+            _selectedUsers.Clear();
+            return View(_selectedUsersCopy);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> AddSelectedUser(int userId)
@@ -65,11 +82,11 @@ namespace MVC.Controllers
             // Add the user to the selected users
             if(!_selectedUsers.Exists(u => u.UserId == user.UserId))
             {
-                AddUserToSelectedUsers(user);
+                await AddUserToSelectedUsers(user);
             }
 
             // Log the action
-            ToastrUtil.ToastrSuccess(this, "User successfully added to selected users");
+            ToastrUtil.ToastrInfo(this, "User successfully added to selected users");
 
             // Return the updated view
             return RedirectToAction("Index");
@@ -92,11 +109,11 @@ namespace MVC.Controllers
             {
                 if (!_selectedUsers.Exists(u => u.UserId == user.UserId))
                 {
-                    AddUserToSelectedUsers(user);
+                    await AddUserToSelectedUsers(user);
                 }
             }
 
-            ToastrUtil.ToastrSuccess(this, "Users of the goups successfully added to selected users");
+            ToastrUtil.ToastrInfo(this, "Users of the goups successfully added to selected users");
             // Return the updated view
             return RedirectToAction("Index");
         }
@@ -111,7 +128,7 @@ namespace MVC.Controllers
             }
 
             _selectedUsers.Remove(user);
-            ToastrUtil.ToastrSuccess(this, "User successfully removed from selected users");
+            ToastrUtil.ToastrInfo(this, "User successfully removed from selected users");
             return RedirectToAction("Index");
         }
 
@@ -120,35 +137,87 @@ namespace MVC.Controllers
         public IActionResult ClearSelectedUsers()
         {
             _selectedUsers.Clear();
-            ToastrUtil.ToastrSuccess(this, "Selected users successfully cleared");
+            ToastrUtil.ToastrInfo(this, "Selected users successfully cleared");
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public IActionResult AddQuotaToSelectedUsers(int quota)
+        public async Task<IActionResult> AddQuotaToSelectedUsers([Bind("quota")] int quota)
         {
-            //TODO: Implement
-            ToastrUtil.ToastrError(this, "Not implemented");
-            return RedirectToAction("Index");
-        }
-
-        private async void AddUserToSelectedUsers(UserDTO user)
-        {
-            
-            AccountDTO account = await _accountService.GetAccountByUserId(user.UserId);
-            IEnumerable<GroupDTO> groups = await _groupService.GetGroupsByUserId(user.UserId);
-            
-            if (account == null && groups == null)
+            //Test if there is at least one user selected
+            if (_selectedUsers.Count == 0)
             {
-               return;
+                ToastrUtil.ToastrError(this, "No user selected");
+                return RedirectToAction("Index");
             }
 
-            ToastrUtil.ToastrSuccess(this, "User successfully added to selected users");
-            var userViewModel = new UserViewModel(user,account,groups.ToList());
+            //Test if the quota is valid (positive number below 1000)
+            if (quota <= 0 || quota > 1000)
+            {
+                ToastrUtil.ToastrError(this, "Invalid quota The quota must be a positive number below 1000");
+                return RedirectToAction("Index");
+            }
 
-            _selectedUsers.Add(userViewModel);
+            //Add the quota to the selected users
+            foreach (var user in _selectedUsers)
+            {
+                TransactionHistoryDTO transaction = new TransactionHistoryDTO
+                {
+                    AccountId = user.AccountId,
+                    Amount = quota,
+                    DateTime = DateTime.Now,
+                    Src = Src.Allocation,
+                    TransactionType = TransactionType.AddCredit,
+                    ConversionName = null,
+                    ConversionValue = null
+                };
+
+                if (!await _transactionService.PostTransaction(transaction))
+                {
+                    ToastrUtil.ToastrError(this, "Unable to handle the transaction");
+ 
+                    return RedirectToAction("Index");
+                }
+            }
+
+            await UpdatesSelectedUsers();
+
+            ToastrUtil.ToastrSuccess(this, "Successfully added the quota of " + quota + " CHF to the selected users");
+            
+            return View("ListOfUsersCheck", _selectedUsers);
+        }
+    
+        private async Task AddUserToSelectedUsers(UserDTO user)
+        {
+            
+            AccountDTO? account = await _accountService.GetAccountByUserId(user.UserId);
+            IEnumerable<GroupDTO>? groups = await _groupService.GetGroupsByUserId(user.UserId);
+
+            if (account != null)
+            {
+                ToastrUtil.ToastrInfo(this, "User successfully added to selected users");
+                var userViewModel = new UserViewModel(user, account, groups.ToList());
+
+                _selectedUsers.Add(userViewModel);
+            }
+            else { 
+                ToastrUtil.ToastrWarning(this, "User not added to selected users, account not found");
+            }
         }
 
 
+        private async Task UpdatesSelectedUsers()
+        {
+            foreach (var user in _selectedUsers)
+            {
+                AccountDTO? account = await _accountService.GetAccountByUserId(user.UserId);
+                IEnumerable<GroupDTO>? groups = await _groupService.GetGroupsByUserId(user.UserId);
+                if (account != null && groups != null)
+                { 
+                    user.Balance = account.Balance;
+                    user.Groups = groups.ToList();
+                }
+            }
+        }
     }
 }

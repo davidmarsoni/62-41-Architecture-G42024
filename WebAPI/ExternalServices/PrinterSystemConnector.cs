@@ -25,16 +25,16 @@ namespace WebApi.ExternalServices
             return isConnected;
         }
 
-        public async Task<Boolean> ConnectToPrinterServer() { 
-            System.Threading.Thread.Sleep(2800); // Simulate a long running task
+        public async Task<Boolean> ConnectToPrinterServer() {
+            System.Threading.Thread.Sleep(500); // Simulate a long running task
             isConnected = true;
             return isConnected;
         }
 
-        public async Task<Boolean> PushTransactionOntoPrinterServer(TransactionHistoryDTO obj)
+        public async Task<Boolean> PushTransactionOntoPrinterServer(String conversionName, int NumberOfPages)
         {
-            System.Threading.Thread.Sleep(2800); // Simulate a long running task
-            System.Console.WriteLine("Transaction pushed to printer server: " + obj.ConversionName + " " + obj.ConversionValue);
+            System.Threading.Thread.Sleep(500); // Simulate a long running task
+            System.Console.WriteLine("Transaction pushed to printer server: " + conversionName + " with " + NumberOfPages + " pages");
             return true;
         }
     }

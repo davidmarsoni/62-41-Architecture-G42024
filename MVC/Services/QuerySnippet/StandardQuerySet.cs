@@ -47,6 +47,20 @@ namespace MVC.Services.QuerySnippet
         /// <summary>
         /// Sends a PUT request to update a resource at the specified URL using the provided HttpClient.
         /// </summary>
+        /// <typeparam name="T">The type of the resource to create.</typeparam>
+        /// <param name="httpClient">The HttpClient instance to use for the request.</param>
+        /// <param name="url">The URL of the resource to update. (include id please)</param>
+        /// <param name="obj">The object containing the updated resource data.</param>
+        /// <returns>Returns if the resource was successfully created, otherwise false.</returns>
+        public static async Task<Boolean> PostNoReturn<T>(HttpClient httpClient, String url, T obj)
+        {
+            HttpResponseMessage? httpResponseMessage = await QS.PostOnUrl(httpClient, url, obj);
+            return QS.isHttpResponseMessageSuccess(httpResponseMessage, QS.POST);
+        }
+
+        /// <summary>
+        /// Sends a PUT request to update a resource at the specified URL using the provided HttpClient.
+        /// </summary>
         /// <typeparam name="T">The type of the resource to update.</typeparam>
         /// <param name="httpClient">The HttpClient instance to use for the request.</param>
         /// <param name="url">The URL of the resource to update. (include id please)</param>
@@ -57,6 +71,8 @@ namespace MVC.Services.QuerySnippet
             HttpResponseMessage? httpResponseMessage = await QS.PutOnUrl(httpClient, url, obj);
             return QS.isHttpResponseMessageSuccess(httpResponseMessage, QS.PUT);
         }
+
+       
 
         /// <summary>
         /// Deletes a resource from the specified URL using the provided HttpClient.

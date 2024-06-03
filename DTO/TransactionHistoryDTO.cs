@@ -25,7 +25,7 @@ namespace DTO
         public TransactionType TransactionType { get; set; }
 
         [Required(ErrorMessage = "Amount is required")]
-        [Range(0, 1000, ErrorMessage = "Please enter a value between {1} and {2}")]
+        [Range(-1000, 1000, ErrorMessage = "Please enter a value between {1} and {2}")]
         public decimal Amount { get; set; }
 
         public int? ConversionId { get; set; }

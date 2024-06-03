@@ -9,7 +9,6 @@
             <th>Users</th>
             <th>Balance</th>
             <th>Groups</th>
-            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -42,26 +41,19 @@
                                 }
                             }
                         </td>
-                        <td>
-                            <form method="post" asp-action="DeleteSelectedUser">
-                                <input type="hidden" name="userId" value="@user.UserId" />
-
-                                <button type="submit" class="btn btn-outline-danger">Remove</button>
-                            </form>
-                        </td>
                     </tr>
                 }
             }
         }
         <tr>
-            @if (Model != null && Model.Any())
-            {
-                <td colspan="2">
-                    <form method="post" asp-action="ClearSelectedUsers">
-                        <button type="submit" class="btn btn-danger">Clear All</button>
-                    </form>
-                </td>
-            }
+            <td colspan="2">
+                <form method="get" asp-action="Index" asp-controller="Home" style="display: inline-block;">
+                    <button type="submit" class="btn btn-primary">Go to Home</button>
+                </form>
+                <form method="get" asp-action="Index" style="display: inline-block;">
+                    <button type="submit" class="btn btn-outline-secondary">Do a other transaction</button>
+                </form>        
+            </td>
         </tr>
     </tbody>
 </table>

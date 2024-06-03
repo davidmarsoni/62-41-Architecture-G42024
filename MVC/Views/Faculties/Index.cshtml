@@ -47,11 +47,17 @@
 <form method="post" asp-action="AddQuotaToSelectedUsers">
         
     <div class="row mt-5">
-        <!-- Amount Field -->
+        
         <div class="col-md-4">
             <div class="form-group">
-                <label for="amount">Quota to Add</label>
-                <input type="number" min="0" class="form-control" id="amount" name="amount" />
+                <label for="quota">Quota to add to the selected user </label>
+                <div class="input-group mb-3">
+                    <input type="number" min="0" class="form-control" id="quota" name="quota" />
+                    <div class="input-group-append">
+                        <span class="input-group-text">CHF</span>
+                    </div>
+                </div>
+                
                 <span class="text-danger" id="amountValidation"></span>
             </div>
         </div>

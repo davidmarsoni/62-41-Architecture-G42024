@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using DAL;
 using DAL.Models;
+using DAL.Classes;
 using DTO;
 using WebApi.Mapper;
 using System.ComponentModel.DataAnnotations;
+using WebApi.ExternalServices;
 
 namespace WebApi.Controllers
 {

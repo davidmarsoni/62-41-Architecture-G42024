@@ -104,7 +104,7 @@ namespace WebApi.Controllers
 
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUserGroup", new { id = userGroup.GroupId }, userGroup);
+            return CreatedAtAction("GetUserGroup", new { id = userGroup.Id }, userGroup);
         }
 
         // DELETE: api/UserGroup/5
