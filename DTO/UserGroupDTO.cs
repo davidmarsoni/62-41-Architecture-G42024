@@ -9,14 +9,12 @@ namespace DTO
 
         [Required(ErrorMessage = "User ID is required")]
         public int UserId { get; set; }
-        public string? Username { get; set; }
+        public string? UserDisplayName { get; set; }
 
         [Required(ErrorMessage = "Group ID is required")]
 
         public int GroupId { get; set; }
 
-        public string? GroupName { get; set; }
-
-        public string? GroupAcronym { get; set; }
+        public string? GroupDisplayName { get; set; }
     }
 }

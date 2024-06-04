@@ -12,7 +12,7 @@ namespace WebApi.Mapper
                 AccountId = account.Id,
                 Balance = account.Balance,
                 UserId = account.UserId,
-                UserName = user?.Username
+                UserDisplayName = $"{user?.FirstName} {user?.LastName} ({user?.Username})"
             };
             return accountDTO;
         }

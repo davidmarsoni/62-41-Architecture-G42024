@@ -64,7 +64,7 @@ namespace MVC.Controllers.Admin
         public async Task<IActionResult> Create([Bind("UserId,Balance")] AccountDTO account)
         {
             // remove the UserName from the model state
-            ModelState.Remove(nameof(UserDTO.Username));
+            ModelState.Remove(nameof(UserDTO.DisplayName));
             if (ModelState.IsValid)
             {
                 if (await _accountService.CreateAccount(account) == null)
@@ -173,7 +173,7 @@ namespace MVC.Controllers.Admin
         public async Task fetchAllUsersAsync()
         {
             IEnumerable<UserDTO>? users = await _userService.GetAllUsersActiveWithoutAccount();
-            ViewData["UsersSelect"] = new SelectList(users, nameof(UserDTO.UserId), nameof(UserDTO.Username));
+            ViewData["UsersSelect"] = new SelectList(users, nameof(UserDTO.UserId), nameof(UserDTO.DisplayName));
             ViewData["UsersAvailable"] = users?.Count() > 0;
         }
 

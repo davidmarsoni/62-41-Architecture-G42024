@@ -61,8 +61,8 @@ namespace MVC.Controllers.Admin
         // GET: UserGroups/Create
         public async Task<IActionResult> Create()
         {
-            ViewData["GroupId"] = new SelectList(await _groupService.GetAllGroups(), nameof(GroupDTO.GroupId), nameof(GroupDTO.Name));
-            ViewData["UserId"] = new SelectList(await _userService.GetAllUsers(), nameof(UserDTO.UserId), nameof(UserDTO.Username));
+            ViewData["GroupId"] = new SelectList(await _groupService.GetAllGroups(), nameof(GroupDTO.GroupId), nameof(GroupDTO.DisplayName));
+            ViewData["UserId"] = new SelectList(await _userService.GetAllUsers(), nameof(UserDTO.UserId), nameof(UserDTO.DisplayName));
             return View();
         }
 
@@ -71,9 +71,8 @@ namespace MVC.Controllers.Admin
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserId,GroupId")] UserGroupDTO userGroup)
         {
-            ModelState.Remove(nameof(UserGroupDTO.Username));
-            ModelState.Remove(nameof(UserGroupDTO.GroupName));
-            ModelState.Remove(nameof(UserGroupDTO.GroupAcronym));
+            ModelState.Remove(nameof(UserGroupDTO.UserDisplayName));
+            ModelState.Remove(nameof(UserGroupDTO.GroupDisplayName));
 
             if(ModelState.IsValid)
             {

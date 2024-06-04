@@ -28,10 +28,10 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Username)
+                    @Html.DisplayFor(modelItem => item.UserDisplayName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.GroupName)
+                    @Html.DisplayFor(modelItem => item.GroupDisplayName)
                 </td>
                 <td>    
                     <form method="get" asp-action="Details" asp-route-id="@item.UserGroupId" class="d-inline-block">

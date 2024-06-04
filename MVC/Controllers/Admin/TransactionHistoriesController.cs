@@ -116,7 +116,7 @@ namespace MVC.Controllers.Admin
         public async Task fetchAllAccountAsync()
         {
             IEnumerable<AccountDTO>? accounts = await _accountService.GetAllAccounts();
-            ViewData["AccountsSelect"] = new SelectList(accounts, nameof(AccountDTO.AccountId), nameof(AccountDTO.UserName));
+            ViewData["AccountsSelect"] = new SelectList(accounts, nameof(AccountDTO.AccountId), nameof(AccountDTO.UserDisplayName));
             ViewData["AccountsAvailable"] = accounts?.Count() > 0;
         }
 

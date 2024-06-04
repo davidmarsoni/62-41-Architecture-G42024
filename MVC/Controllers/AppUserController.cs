@@ -1,7 +1,10 @@
 ﻿using DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MVC.Controllers.Util;
+using MVC.Models;
 using MVC.Services.Interfaces;
+using System.Reflection;
 
 namespace MVC.Controllers
 {
@@ -12,6 +15,7 @@ namespace MVC.Controllers
         private readonly IAccountService _accountService;
         private readonly IConversionService _conversionService;
         private IEnumerable<ConversionDTO>? _conversionDTOs;
+        private decimal _calculatedPrice;
 
         public AppUserController(ILogger<AppUserController> logger, ITransactionHistoryService transactionHistoryService, IAccountService accountService, IConversionService conversionService)
         {
@@ -31,30 +35,64 @@ namespace MVC.Controllers
             return View();
         }
 
+
         public async Task<IActionResult> Buy()
         {
+            AppUserBuyViewModel appUserBuyViewModel = new AppUserBuyViewModel();
             await fetchAllAccountAsync();
-            await fetchAllConversionsAsync();
+            await createSelectListConversions();
+            return View(appUserBuyViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Calculate([Bind("AccountId,ConversionId,Quantity")] AppUserBuyViewModel appUserBuyViewModel)
+        {
+            IEnumerable<ConversionDTO>? conversions = await fetchAllConversionDTOsAsync();
+            appUserBuyViewModel.ConversionValue = 0;
+            if (conversions != null && conversions.Any())
+            {
+                ConversionDTO? conversion = conversions.FirstOrDefault(c => c.ConversionId == appUserBuyViewModel.ConversionId);
+                if (conversion == null)
+                {
+                    ToastrUtil.ToastrError(this, "Conversion not found");
+                }
+                else {
+                    appUserBuyViewModel.ConversionValue = conversion.ConversionValue;
+                }
+            }
+            await fetchAllAccountAsync();
+            await createSelectListConversions();
+            return View("Buy",appUserBuyViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Buy([Bind("AccountId,ConversionId,Quantity")] AppUserBuyViewModel appUserBuyViewModel, string command)
+        {
+            AppUserBuyViewModel newAppUserBuyViewModel = new AppUserBuyViewModel();
+            await fetchAllAccountAsync();
+            await createSelectListConversions();
             return View();
         }
 
         public async Task fetchAllAccountAsync()
         {
             IEnumerable<AccountDTO>? accounts = await _accountService.GetAllAccounts();
-            ViewData["AccountsSelect"] = new SelectList(accounts, nameof(AccountDTO.AccountId), nameof(AccountDTO.UserName));
+            ViewData["AccountsSelect"] = new SelectList(accounts, nameof(AccountDTO.AccountId), nameof(AccountDTO.UserDisplayName));
             ViewData["AccountsAvailable"] = accounts?.Count() > 0;
         }
 
-        public async Task fetchAllConversionsAsync()
+        public async Task<IEnumerable<ConversionDTO>?> fetchAllConversionDTOsAsync()
         {
-            _conversionDTOs = new List<ConversionDTO>();
-            // fetch all the conversions and add them to the list
-            IEnumerable<ConversionDTO>? conversions = await _conversionService.GetAllConversions();
-            if (conversions != null)
-            {
-                _conversionDTOs = _conversionDTOs.Concat(conversions);
-            }
+            return await _conversionService.GetAllConversions();
+        }
 
+        public async Task createSelectListConversions()
+        {
+            _conversionDTOs = await fetchAllConversionDTOsAsync();
+            if (_conversionDTOs == null || _conversionDTOs.Count() == 0)
+            {
+                ToastrUtil.ToastrError(this, "Unable to fetch conversions, please contact support");
+            }
             // create the select list
             ViewData["ConversionsSelect"] = new SelectList(_conversionDTOs, nameof(ConversionDTO.ConversionId), nameof(ConversionDTO.ConversionName));
             ViewData["ConversionsAvailable"] = _conversionDTOs?.Count() > 0;

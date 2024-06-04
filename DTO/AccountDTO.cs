@@ -14,6 +14,6 @@ namespace DTO
         // user fields
         public int UserId { get; set; }
         
-        public string? UserName { get; set; }
+        public string? UserDisplayName { get; set; }
     }
 }

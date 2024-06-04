@@ -15,7 +15,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                @Html.DisplayNameFor(model => model.UserDisplayName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Balance)
@@ -28,7 +28,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
+                    @Html.DisplayFor(modelItem => item.UserDisplayName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Balance)

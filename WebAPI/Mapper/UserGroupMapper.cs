@@ -11,10 +11,9 @@ namespace WebApi.Mapper
             {
                 UserGroupId = userGroup.Id,
                 GroupId = userGroup.GroupId,
-                GroupName = group?.Name,
-                GroupAcronym = group?.Acronym,
+                GroupDisplayName = $"{group?.Name} ({group?.Acronym})",
                 UserId = userGroup.UserId,
-                Username = user?.Username,
+                UserDisplayName = $"{user?.FirstName} {user?.LastName} ({user?.Username})"
             };
 
             return userGroupDTO;
