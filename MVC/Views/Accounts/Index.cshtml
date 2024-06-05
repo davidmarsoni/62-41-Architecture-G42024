@@ -15,7 +15,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.UserDisplayName)
+                User's name
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Balance)
@@ -31,7 +31,7 @@
                     @Html.DisplayFor(modelItem => item.UserDisplayName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Balance)
+                    @Html.DisplayFor(modelItem => item.Balance) CHF
                 </td>
                 <td>
                     <form method="get" asp-action="Edit" asp-route-id="@item.AccountId" class="d-inline-block">

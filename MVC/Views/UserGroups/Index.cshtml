@@ -1,4 +1,6 @@
-﻿@model IEnumerable<DTO.UserGroupDTO>
+﻿@model IPagedList<DTO.UserGroupDTO>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
 
 @{
     ViewData["Title"] = "Index";
@@ -15,7 +17,7 @@
     <thead>
         <tr>
             <th>
-               Users
+                Users
             </th>
             <th>
                 Groups
@@ -33,7 +35,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.GroupDisplayName)
                 </td>
-                <td>    
+                <td>
                     <form method="get" asp-action="Details" asp-route-id="@item.UserGroupId" class="d-inline-block">
                         <button type="submit" class="btn btn-secondary">Details</button>
                     </form>
@@ -45,3 +47,13 @@
         }
     </tbody>
 </table>
+
+<div class="d-flex justify-content-center">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }),
+            new PagedListRenderOptions
+    {
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" },
+        UlElementClasses = new[] { "pagination" }
+    })
+</div>

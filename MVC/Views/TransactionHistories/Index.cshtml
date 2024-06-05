@@ -1,4 +1,6 @@
-﻿@model IEnumerable<DTO.TransactionHistoryDTO>
+﻿@model IPagedList<DTO.TransactionHistoryDTO>
+@using X.PagedList
+@using X.PagedList.Mvc.Core;
 
 @{
     ViewData["Title"] = "Index";
@@ -15,59 +17,70 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.AccountUsername)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().AccountUsername)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TransactionType)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().TransactionType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Src)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Src)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateTime)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().DateTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Amount)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Amount)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ConversionName)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().ConversionName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ConversionValue)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().ConversionValue)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountUsername)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TransactionType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Src)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ConversionName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ConversionValue)
-            </td>
-            <td>
-                <form method="get" asp-action="Details" asp-route-id="@item.TransactionHistoryId" class="d-inline-block">
-                    <button type="submit" class="btn btn-secondary">Details</button>
-                </form>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountUsername)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TransactionType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Src)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ConversionName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ConversionValue)
+                </td>
+                <td>
+                    <form method="get" asp-action="Details" asp-route-id="@item.TransactionHistoryId" class="d-inline-block">
+                        <button type="submit" class="btn btn-secondary">Details</button>
+                    </form>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<div class="d-flex justify-content-center">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }),
+            new PagedListRenderOptions
+    {
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" },
+        UlElementClasses = new[] { "pagination" }
+    })
+</div>

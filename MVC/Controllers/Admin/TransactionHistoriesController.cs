@@ -8,6 +8,7 @@ using MVC.Controllers.Util;
 using MVC.Services.Interfaces;
 using System.Text.Json.Nodes;
 using Azure.Core.Serialization;
+using X.PagedList;
 
 namespace MVC.Controllers.Admin
 {
@@ -30,7 +31,7 @@ namespace MVC.Controllers.Admin
         }
 
         // GET: Groups
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page, int pageSize = 10)
         {
             IEnumerable<TransactionHistoryDTO>? transactionHistories = await _transactionHistoryService.GetAllTransactionHistories();
             if (transactionHistories == null)
@@ -38,7 +39,14 @@ namespace MVC.Controllers.Admin
                 ToastrUtil.ToastrError(this, "Unable to fetch transactions, please contact support");
                 return Redirect("/");
             }
-            return View(transactionHistories);
+
+            // Sort by date in descending order
+            transactionHistories = transactionHistories.OrderByDescending(th => th.DateTime);
+
+            int pageNumber = page ?? 1;
+            var pagedList = transactionHistories.ToPagedList(pageNumber, pageSize);
+
+            return View(pagedList);
         }
 
         // GET: Groups/Details/5

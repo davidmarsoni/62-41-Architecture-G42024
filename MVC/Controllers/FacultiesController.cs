@@ -87,6 +87,9 @@ namespace MVC.Controllers
                 {
                     ToastrUtil.ToastrInfo(this, "User successfully added to selected users");
                 }
+            }else
+            {
+                ToastrUtil.ToastrWarning(this, "User already in selected users");
             }
 
             // Return the updated view

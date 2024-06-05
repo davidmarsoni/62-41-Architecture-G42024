@@ -14,13 +14,13 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ConversionId" />
             <div class="form-group">
-                <label asp-for="ConversionName" class="control-label"></label>
+                <label asp-for="ConversionName" class="control-label">Name</label>
                 <input asp-for="ConversionName" class="form-control" />
                 <span asp-validation-for="ConversionName" class="text-danger"></span>
             </div>
            
             <div class="form-group mt-3">
-                <label asp-for="ConversionValue" class="control-label"></label>
+                <label asp-for="ConversionValue" class="control-label">Value</label>
                 <div class="input-group mb-3">
                     <input type="number" min="0" asp-for="ConversionValue" class="form-control" />
                     <div class="input-group-append">

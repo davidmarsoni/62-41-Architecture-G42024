@@ -5,69 +5,75 @@
 }
 
 <h1>Add Quota to Users</h1>
-
-<form method="post" asp-action="AddSelectedGroup">
-    <div class="row d-flex align-items-stretch mt-3">
-        <!-- Group Selection Row -->
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="groupSelect" class="control-label">Select Group</label>
-               
-                <div class="input-group">
-                    <select id="groupSelect" class="form-select" name="groupId" asp-for="GroupId" asp-items="ViewBag.Groups"></select>
-
-                   
-                    <button type="submit" class="btn btn-primary btn-block" id="moveGroup">Add Group</button>
-                </div>
-                <span asp-validation-for="GroupId" class="text-danger"></span>
-            </div>
-        </div>
-       
-    </div>
-</form>
-
-<form method="post" asp-action="AddSelectedUser">
-    <div class="row d-flex align-items-stretch mt-3">
-        <!-- User Selection Row -->
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="userSelect" class="control-label">Select User</label>
-
-                <div class="input-group">
-                    <select id="userSelect" class="form-select" name="userId" asp-for="UserId" asp-items="ViewBag.Users"></select>
-                    <button type="submit" class="btn btn-primary btn-block" id="moveUser">Add User</button>
-                </div>
-                <span asp-validation-for="GroupId" class="text-danger"></span>
-            </div>
-        </div>
-    </div>
-</form>
-
-@Html.Partial("_ListOfUsers", Model.SelectedUsers)
-<form method="post" asp-action="AddQuotaToSelectedUsers">
-        
-    <div class="row mt-5">
-        
-        <div class="col-md-4">
-            <div class="form-group">
-                <label for="quota">Quota to add to the selected user </label>
-                <div class="input-group mb-3">
-                    <input type="number" min="0" step="0.01" class="form-control" id="quota" name="quota" />
-                    <div class="input-group-append">
-                        <span class="input-group-text">CHF</span>
+<hr />
+<div class="row d-flex align-items-stretch mt-3">
+    <!-- Form and Image Container -->
+    <div class="col-md-6">
+        <!-- Group Selection Form -->
+        <div class="row mb-3">
+            <div class="col">
+                <form method="post" asp-action="AddSelectedGroup">
+                    <div class="form-group">
+                        <label for="groupSelect" class="control-label">Select Group</label>
+                        <div class="input-group">
+                            <select id="groupSelect" class="form-select" name="groupId" asp-for="GroupId" asp-items="ViewBag.Groups"></select>
+                            <button type="submit" class="btn btn-primary btn-block" id="moveGroup">Add Group</button>
+                        </div>
+                        <span asp-validation-for="GroupId" class="text-danger"></span>
                     </div>
-                </div>
-                
-                <span class="text-danger" id="amountValidation"></span>
+                </form>
             </div>
         </div>
-    </div>
+        <!-- User Selection Form -->
+        <div class="row">
+            <div class="col">
+                <form method="post" asp-action="AddSelectedUser">
+                    <div class="form-group">
+                        <label for="userSelect" class="control-label">Select User</label>
+                        <div class="input-group">
+                            <select id="userSelect" class="form-select" name="userId" asp-for="UserId" asp-items="ViewBag.Users"></select>
+                            <button type="submit" class="btn btn-primary btn-block" id="moveUser">Add User</button>
+                        </div>
+                        <span asp-validation-for="UserId" class="text-danger"></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- -->
+        <div>
+            <form method="post" asp-action="AddQuotaToSelectedUsers">
 
-    <div class="row mt-3">
-        <div class="col-md-4">
-             <button type="submit" class="btn btn-primary">Add quota for the selected users</button>
+                    <div class="col-md-12 mt-5">
+                        <div class="form-group">
+                            <label for="quota">Allocated quota for the users </label>
+                            <div class="input-group mb-3">
+                                <input type="number" min="0" step="0.01" class="form-control" id="quota" name="quota" />
+                                <div class="input-group-append">
+                                    <span class="input-group-text">CHF</span>
+                                </div>
+                            </div>
+
+                            <span class="text-danger" id="amountValidation"></span>
+                        </div>
+                    </div>
+               
+
+                
+                    <div class="col-md-12 mb-3">
+                        <button type="submit" class="btn btn-primary">Allocate quota for the selected users below</button>
+                    </div>
+                
+            </form>
         </div>
     </div>
-</form>
+    <!-- Image Column -->
+    <div class="col-md-6 d-flex align-items-center">
+        <img src="~/images/campus-bellevue-hes-so-valais-wallis-sierre.jpg.webp" class="img-fluid rounded" style="max-width: 100%;" />
+    </div>
+</div>
+
+<h1>Selected Users</h1>
+@Html.Partial("_ListOfUsers", Model.SelectedUsers)
+
 
 

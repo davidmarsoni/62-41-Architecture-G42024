@@ -10,6 +10,7 @@ using DAL.Models;
 using MVC.Services.Interfaces;
 using DTO;
 using MVC.Controllers.Util;
+using X.PagedList;
 
 namespace MVC.Controllers.Admin
 {
@@ -27,10 +28,10 @@ namespace MVC.Controllers.Admin
             _userService = userService;
             _groupService = groupService;
         }
-       
+
 
         // GET: UserGroups
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page, int pageSize = 10)
         {
             IEnumerable<UserGroupDTO>? userGroups = await _userGroupService.GetAllUserGroups();
             if (userGroups == null)
@@ -38,7 +39,11 @@ namespace MVC.Controllers.Admin
                 ToastrUtil.ToastrError(this, "Unable to fetch user groups, please contact support");
                 return Redirect("/");
             }
-            return View(userGroups);
+
+            int pageNumber = page ?? 1;
+            var pagedList = userGroups.ToPagedList(pageNumber, pageSize);
+
+            return View(pagedList);
         }
 
         // GET: UserGroups/Details/5
