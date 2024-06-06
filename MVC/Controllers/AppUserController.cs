@@ -1,4 +1,5 @@
-﻿using DTO;
+﻿using DAL.Classes;
+using DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MVC.Controllers.Util;
@@ -11,16 +12,16 @@ namespace MVC.Controllers
     public class AppUserController : Controller
     {
         private readonly ILogger<AppUserController> _logger;
-        private readonly ITransactionHistoryService _transactionHistoryService;
+        private readonly ITransactionService _transactionService;
         private readonly IAccountService _accountService;
         private readonly IConversionService _conversionService;
         private IEnumerable<ConversionDTO>? _conversionDTOs;
         private decimal _calculatedPrice;
 
-        public AppUserController(ILogger<AppUserController> logger, ITransactionHistoryService transactionHistoryService, IAccountService accountService, IConversionService conversionService)
+        public AppUserController(ILogger<AppUserController> logger, ITransactionService transactionService, IAccountService accountService, IConversionService conversionService)
         {
             _logger = logger;
-            _transactionHistoryService = transactionHistoryService;
+            _transactionService = transactionService;
             _accountService = accountService;
             _conversionService = conversionService;
         }
@@ -29,12 +30,6 @@ namespace MVC.Controllers
         {
             return View();
         }
-
-        public IActionResult PayOnline()
-        {
-            return View();
-        }
-
 
         public async Task<IActionResult> Buy()
         {
@@ -68,9 +63,108 @@ namespace MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Buy([Bind("AccountId,ConversionId,Quantity")] AppUserBuyViewModel appUserBuyViewModel, string command)
         {
-            AppUserBuyViewModel newAppUserBuyViewModel = new AppUserBuyViewModel();
+            // remove the command from the model
+            ModelState.Remove(nameof(command));
+            if (ModelState.IsValid)
+            {
+                // fetch the conversion
+                IEnumerable<ConversionDTO>? conversions = await fetchAllConversionDTOsAsync();
+                ConversionDTO _conversion;
+                appUserBuyViewModel.ConversionValue = 0;
+                if (conversions != null && conversions.Any())
+                {
+                    ConversionDTO? conversion = conversions.FirstOrDefault(c => c.ConversionId == appUserBuyViewModel.ConversionId);
+                    if (conversion == null)
+                    {
+                        ToastrUtil.ToastrError(this, "Conversion not found");
+                        await fetchAllAccountAsync();
+                        await createSelectListConversions();
+                        return View();
+                    }
+                    else
+                    {
+                        _conversion = conversion;
+                        appUserBuyViewModel.ConversionValue = conversion.ConversionValue;
+                    }
+                }
+                else
+                {
+                    ToastrUtil.ToastrError(this, "Conversion not found");
+                    await fetchAllAccountAsync();
+                    await createSelectListConversions();
+                    return View();
+                }
+
+                TransactionHistoryDTO transactionHistoryDTO = new TransactionHistoryDTO()
+                {
+                    AccountId = appUserBuyViewModel.AccountId,
+                    TransactionType = TransactionType.UseCredit,
+                    Src = Src.Printer,
+                    Amount = appUserBuyViewModel.calculatedPrice,
+                    ConversionName = _conversion.ConversionName,
+                    ConversionValue = appUserBuyViewModel.ConversionValue
+                };
+                bool success = await _transactionService.PostTransaction(transactionHistoryDTO);
+                if (success)
+                {
+                    ToastrUtil.ToastrSuccess(this, "Payment successful");
+                }
+                else
+                {   
+                    // get the account
+                    AccountDTO? account = await _accountService.GetAccountById(appUserBuyViewModel.AccountId);
+                    if (account == null)
+                    {
+                        ToastrUtil.ToastrError(this, "Account not found");
+                        await fetchAllAccountAsync();
+                        await createSelectListConversions();
+                        return View();
+                    }
+                    // check if the account has enough balance
+                    if (account.Balance < appUserBuyViewModel.calculatedPrice)
+                    {
+                        ToastrUtil.ToastrError(this, "Insufficient balance, you only have " + account.Balance + " CHF. (" + (account.Balance - appUserBuyViewModel.calculatedPrice) + " CHF)");
+                    }
+                    else
+                    {
+                        ToastrUtil.ToastrError(this, "Payment failed");
+                    }
+                }
+            }
             await fetchAllAccountAsync();
             await createSelectListConversions();
+            return View(appUserBuyViewModel);
+        }
+
+        public async Task<IActionResult> PayOnline()
+        {
+            await fetchAllAccountAsync();
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PayOnline([Bind("AccountId,Amount")] AppUserPayOnlineViewModel appUserPayOnlineViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                TransactionHistoryDTO transactionHistoryDTO = new TransactionHistoryDTO()
+                {
+                    AccountId = appUserPayOnlineViewModel.AccountId,
+                    Amount = appUserPayOnlineViewModel.Amount,
+                    TransactionType = TransactionType.AddCredit,
+                    Src = Src.PayOnline
+                };
+                bool success = await _transactionService.PostTransaction(transactionHistoryDTO);
+                if (success)
+                {
+                    ToastrUtil.ToastrSuccess(this, "Payment successful");
+                }
+                else
+                {
+                    ToastrUtil.ToastrError(this, "Payment failed");
+                }
+            }
+            await fetchAllAccountAsync();
             return View();
         }
 

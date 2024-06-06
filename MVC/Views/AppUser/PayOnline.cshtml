@@ -1,0 +1,42 @@
+﻿@model AppUserPayOnlineViewModel
+
+@{
+    ViewData["Title"] = "PayOnline";
+}
+
+<h1>Create</h1>
+
+<h4>TransactionHistory</h4>
+<hr />
+<div class="row">
+    <div class="col-12 col-lg-6 col-xl-4">
+        <form asp-action="PayOnline">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="AccountId" class="control-label">User</label>
+                <select asp-for="AccountId" class="form-select" asp-items="ViewBag.AccountsSelect"></select>
+                <span asp-validation-for="AccountId" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <label asp-for="Amount" class="control-label"></label>
+                <div class="input-group mb-3">
+                    <input asp-for="Amount" class="form-control" type="number" step="0.01" />
+                    <div class="input-group-append">
+                        <span class="input-group-text">CHF</span>
+                    </div>
+                </div>
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+            <!-- hidden input to transmit conversionList (IEnumerable) -->
+            @if (ViewBag.AccountsAvailable)
+            {
+                <div class="form-group mt-3">
+                    <input type="submit" value="PayOnline" class="btn btn-primary" />
+                </div>
+            }
+        </form>
+    </div>
+    <div class="col-12 col-lg-6 col-xl-8">
+        <img class="img-fluid" src="https://i0.wp.com/www.frenchweb.fr/wp-content/uploads/2023/02/LOGO-850-stripe.png?fit=850%2C478&ssl=1" />
+    </div>
+</div>
