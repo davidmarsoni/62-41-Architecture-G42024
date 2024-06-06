@@ -73,7 +73,10 @@
 </div>
 
 <h1>Selected Users</h1>
+@{
+    ViewBag.showClearAll = true;
+    ViewBag.showUtility = false;
+}
 @Html.Partial("_ListOfUsers", Model.SelectedUsers)
-
 
 

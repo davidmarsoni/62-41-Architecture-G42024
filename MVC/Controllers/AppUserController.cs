@@ -13,24 +13,28 @@ namespace MVC.Controllers
     {
         private readonly ILogger<AppUserController> _logger;
         private readonly ITransactionService _transactionService;
+        private readonly ITransactionHistoryService _transactionHistoryService;
         private readonly IAccountService _accountService;
         private readonly IConversionService _conversionService;
         private IEnumerable<ConversionDTO>? _conversionDTOs;
         private decimal _calculatedPrice;
 
-        public AppUserController(ILogger<AppUserController> logger, ITransactionService transactionService, IAccountService accountService, IConversionService conversionService)
+        public AppUserController(ILogger<AppUserController> logger, ITransactionService transactionService, ITransactionHistoryService transactionHistoryService, IAccountService accountService, IConversionService conversionService)
         {
             _logger = logger;
             _transactionService = transactionService;
+            _transactionHistoryService = transactionHistoryService;
             _accountService = accountService;
             _conversionService = conversionService;
         }
 
+        // GET: AppUser
         public IActionResult Index()
         {
             return View();
         }
 
+        // GET: AppUser/Buy
         public async Task<IActionResult> Buy()
         {
             AppUserBuyViewModel appUserBuyViewModel = new AppUserBuyViewModel();
@@ -39,6 +43,7 @@ namespace MVC.Controllers
             return View(appUserBuyViewModel);
         }
 
+        // POST: AppUser/Buy
         [HttpPost]
         public async Task<IActionResult> Calculate([Bind("AccountId,ConversionId,Quantity")] AppUserBuyViewModel appUserBuyViewModel)
         {
@@ -60,6 +65,7 @@ namespace MVC.Controllers
             return View("Buy",appUserBuyViewModel);
         }
 
+        // POST: AppUser/Buy
         [HttpPost]
         public async Task<IActionResult> Buy([Bind("AccountId,ConversionId,Quantity")] AppUserBuyViewModel appUserBuyViewModel, string command)
         {
@@ -142,6 +148,7 @@ namespace MVC.Controllers
             return View();
         }
 
+        // POST: AppUser/PayOnline
         [HttpPost]
         public async Task<IActionResult> PayOnline([Bind("AccountId,Amount")] AppUserPayOnlineViewModel appUserPayOnlineViewModel)
         {
@@ -164,6 +171,13 @@ namespace MVC.Controllers
                     ToastrUtil.ToastrError(this, "Payment failed");
                 }
             }
+            await fetchAllAccountAsync();
+            return View();
+        }
+
+        // GET: AppUser/History
+        public async Task<IActionResult> History()
+        {
             await fetchAllAccountAsync();
             return View();
         }

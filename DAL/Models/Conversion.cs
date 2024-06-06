@@ -4,6 +4,6 @@ namespace DAL.Models
     {
         public int Id { get; set; }
         public required string Name { get; set; }
-        public decimal Value { get; set; } = 0!;
+        public required decimal Value { get; set; } = 0!;
     }
 }

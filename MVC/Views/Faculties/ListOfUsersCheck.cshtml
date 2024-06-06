@@ -1,59 +1,7 @@
 ﻿@model List<MVC.Models.UserViewModel>
 
 @{
+    ViewBag.showClearAll = false;
+    ViewBag.showUtility = true;
 }
-
-<table class="table mt-3">
-    <thead>
-        <tr>
-            <th>Users</th>
-            <th>Balance</th>
-            <th>Groups</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null)
-        {
-            foreach (var user in Model)
-            {
-                if (user != null)
-                {
-                    <tr>
-                        <td>@user.DisplayName </td>
-                        <td>
-                            @if (user.Balance != null)
-                            {
-                                <span>@user.Balance CHF</span>
-                            }
-                        </td>
-                        <td>
-                            @if (@user.Groups != null)
-                            {
-                                foreach (var group in user.Groups)
-                                {
-                                    if (group != null && group.Name != null && group.Acronym != null)
-                                    {
-                                        <span>@group.Acronym</span>
-                                    }else if (group != null && group.Name != null)
-                                    {
-                                        <span>@group.Name</span>
-                                    }        
-                                }
-                            }
-                        </td>
-                    </tr>
-                }
-            }
-        }
-        <tr>
-            <td colspan="2">
-                <form method="get" asp-action="Index" asp-controller="Home" style="display: inline-block;">
-                    <button type="submit" class="btn btn-primary">Go to Home</button>
-                </form>
-                <form method="get" asp-action="Index" style="display: inline-block;">
-                    <button type="submit" class="btn btn-outline-secondary">Do a other transaction</button>
-                </form>        
-            </td>
-        </tr>
-    </tbody>
-</table>
+@Html.Partial("_ListOfUsers", Model)

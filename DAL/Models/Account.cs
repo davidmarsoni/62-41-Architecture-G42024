@@ -9,9 +9,9 @@ namespace DAL.Models
     public class Account
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public required int UserId { get; set; }
         public User User { get; set; } = null!;
-        public decimal Balance { get; set; } = 0!;
+        public required decimal Balance { get; set; } = 0!;
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }

@@ -9,9 +9,9 @@ namespace DAL.Models
     public class UserGroup
     {
         public int Id { get; set; } 
-        public int UserId { get; set; }
+        public required int UserId { get; set; }
         public User User { get; set; } = null!;
-        public int GroupId { get; set; }
+        public required int GroupId { get; set; }
         public Group Group { get; set; } = null!;
     }
 }

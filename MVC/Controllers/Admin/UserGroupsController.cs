@@ -51,13 +51,13 @@ namespace MVC.Controllers.Admin
         {
             if (id == null)
             {
-                return NotFound();
+                return idNotProvided();
             }
 
             UserGroupDTO? userGroup = await _userGroupService.GetUserGroupById(id.Value);
             if (userGroup == null)
             {
-                return NotFound();
+                return userGroupNotFound();
             }
 
             return View(userGroup);
@@ -127,7 +127,7 @@ namespace MVC.Controllers.Admin
 
         private IActionResult idNotProvided()
         {
-            ToastrUtil.ToastrError(this, "Id not provided");
+            ToastrUtil.ToastrError(this, "Id of the user group was not provided");
             return NotFound();
         }
 

@@ -54,11 +54,25 @@
             }
         }
         <tr>
-            @if (Model != null && Model.Any())
+            @if (ViewBag.showClearAll == true)
+            {
+                @if (Model != null && Model.Any())
+                {
+                    <td colspan="2">
+                        <form method="post" asp-action="ClearSelectedUsers">
+                            <button type="submit" class="btn btn-danger">Clear All</button>
+                        </form>
+                    </td>
+                }
+            }
+            @if (ViewBag.showUtility == true)
             {
                 <td colspan="2">
-                    <form method="post" asp-action="ClearSelectedUsers">
-                        <button type="submit" class="btn btn-danger">Clear All</button>
+                    <form method="get" asp-action="Index" asp-controller="Home" style="display: inline-block;">
+                        <button type="submit" class="btn btn-primary">Go to Home</button>
+                    </form>
+                    <form method="get" asp-action="Index" style="display: inline-block;">
+                        <button type="submit" class="btn btn-outline-secondary">Do a other transaction</button>
                     </form>
                 </td>
             }

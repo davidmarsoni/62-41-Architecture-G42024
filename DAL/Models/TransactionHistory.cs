@@ -8,9 +8,9 @@ namespace DAL.Models
         public int AccountId { get; set; }
         public Account? Account { get; set; } = null!;
         public DateTime DateTime { get; set; }
-        public Src Src { get; set; }
-        public TransactionType TransactionType { get; set; }
-        public decimal Amount { get; set; } = 0!;
+        public required Src Src { get; set; }
+        public required TransactionType TransactionType { get; set; }
+        public required decimal Amount { get; set; } = 0!;
         public string? ConversionName { get; set; }
         public decimal? ConversionValue { get; set; }
     }
