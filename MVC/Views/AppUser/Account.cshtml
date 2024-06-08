@@ -23,7 +23,12 @@
     <div class="col-md-6">
         <div class="form-group">
             <label asp-for="Balance" class="control-label">Current Balance</label>
-            <input asp-for="Balance" class="form-control" readonly />
+            <div class="input-group mb-3">
+                <input asp-for="Balance" class="form-control" type="number" readonly />
+                <div class="input-group-append">
+                    <span class="input-group-text">CHF</span>
+                </div>
+            </div>
         </div>
     </div>
     

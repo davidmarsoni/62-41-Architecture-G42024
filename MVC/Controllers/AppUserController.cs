@@ -223,7 +223,7 @@ namespace MVC.Controllers
             {
                 AccountId = account.AccountId,
                 Balance = account.Balance,
-                TransactionHistories = transactionHistories.ToList()
+                TransactionHistories = transactionHistories.OrderByDescending(th => th.DateTime).ToList()
             });
         }
 
