@@ -65,5 +65,25 @@ namespace WebApi.Controllers
             return transactionHistoryDTO;
         }
 
+
+        // Get: api/TransactionHistories/Account/5
+        [HttpGet("Account/{accountId}")]
+        public async Task<ActionResult<IEnumerable<TransactionHistoryDTO>>> GetTransactionHistoriesByAccountId(int accountId)
+        {
+            IEnumerable<TransactionHistory> transactionHistories = await _context.TransactionHistory.Where(th => th.AccountId == accountId).ToListAsync();
+            List<TransactionHistoryDTO> result = new List<TransactionHistoryDTO>();
+            if (transactionHistories != null && transactionHistories.Count() > 0)
+            {
+                foreach (TransactionHistory transactionHistory in transactionHistories)
+                {
+                    // find the user associated with the account
+                    Account account = await _context.Accounts.FindAsync(transactionHistory.AccountId);
+                    User user = await _context.Users.FindAsync(account.UserId);
+                    // convert the transaction history to a DTO
+                    result.Add(TransactionHistoryMapper.toDTO(transactionHistory, user));
+                }
+            }
+            return result;
+        }   
     }
 }

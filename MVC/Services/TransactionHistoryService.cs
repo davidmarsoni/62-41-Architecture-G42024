@@ -20,6 +20,11 @@ namespace MVC.Services
             return await SQS.GetAll<TransactionHistoryDTO>(_client, _baseUrl);
         }
 
+        public Task<IEnumerable<TransactionHistoryDTO>?> GetTransactionHistoriesByAccountId(int accountId)
+        {
+            return SQS.GetAll<TransactionHistoryDTO>(_client, $"{_baseUrl}/Account/{accountId}");
+        }
+
         public async Task<TransactionHistoryDTO?> GetTransactionHistoryById(int id)
         {
             return await SQS.Get<TransactionHistoryDTO>(_client, $"{_baseUrl}/{id}");

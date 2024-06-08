@@ -2,6 +2,119 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+<div class="text-left">
+    <div class="row">
+        <div class="col-12 text-center bg-light p-5">
+            <h1 class="display-4">Welcome to Print-O-Matic</h1>
+            <p class="lead">The best place to manage your documents</p>
+        </div>
+    </div>
+    
+    <div class="container px-4 py-5" id="user_panel">
+        <h2 class="pb-2 border-bottom">Users</h2>
+        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+            <div class="col d-flex align-items-start">
+                <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+                    <i class="bi bi-toggles2"></i>
+                </div>
+                <div>
+                    <h3 class="fs-2 text-body-emphasis">Account</h3>
+                    <p>With the account page users can access to their balance and see all his transactions history</p>
+                    <a asp-area="" asp-controller="AppUser" asp-action="Account" class="btn btn-primary">
+                        Account
+                    </a>
+                </div>
+            </div>
+            <div class="col d-flex align-items-start">
+                <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+                    <i class="bi bi-printer"></i>
+                </div>
+                <div>
+                    <h3 class="fs-2 text-body-emphasis">Print</h3>
+                    <p>With the print page users will be able to convert some of their balance to pages for the print</p>
+                    <a asp-area="" asp-controller="AppUser" asp-action="Buy" class="btn btn-primary">
+                        Print
+                    </a>
+                </div>
+            </div>
+            <div class="col d-flex align-items-start">
+                <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+                    <i class="bi bi-credit-card-2-front"></i>
+                </div>
+                <div>
+                    <h3 class="fs-2 text-body-emphasis">Pay Online</h3>
+                    <p>With the Pay Online page users are able to refill their balance by buying more credit </p>
+                    <a asp-area="" asp-controller="AppUser" asp-action="PayOnline" class="btn btn-primary">
+                        Pay Online
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container px-4 py-5" id="faculties">
+        <h2 class="pb-2 border-bottom">Faculties</h2>
+        <div class="row g-4 py-5 row-cols-1 row-cols-lg-2">
+            <div class="col-lg-6 d-flex align-items-start">
+                <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+                    <i class="bi bi-printer-fill"></i>
+                </div>
+                <div>
+                    <h3 class="fs-2 text-body-emphasis">Allocation</h3>
+                    <p>With the allocation page, Faculties can add an allocation to a custom user list. They have to first choose between groups and they have the possibility to remove a user from a group or add one more user.</p>
+                    <a asp-area="" asp-controller="Faculties" asp-action="Index" class="btn btn-primary">
+                        Allocation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container px-4 py-5" id="admin">
+        <h2 class="pb-2 border-bottom">Admin</h2>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 py-5">
+            <div class="col d-flex align-items-start">
+                <i class="bi bi-person-lines-fill flex-shrink-0 me-3" style="font-size: 1.75em;"></i>
+                <div>
+                    <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Manage Account</h3>
+                    <p>Manage user accounts and their settings.</p>
+                </div>
+            </div>
+            <div class="col d-flex align-items-start">
+                <i class="bi bi-people-fill flex-shrink-0 me-3" style="font-size: 1.75em;"></i>
+                <div>
+                    <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Manage User</h3>
+                    <p>Manage individual users and their data.</p>
+                </div>
+            </div>
+            <div class="col d-flex align-items-start">
+                <i class="bi bi-people-fill flex-shrink-0 me-3" style="font-size: 1.75em;"></i>
+                <div>
+                    <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Manage Groups</h3>
+                    <p>Manage user groups and their permissions.</p>
+                </div>
+            </div>
+            <div class="col d-flex align-items-start">
+                <i class="bi bi-person-plus-fill flex-shrink-0 me-3" style="font-size: 1.75em;"></i>
+                <div>
+                    <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Manage Adding User to Group</h3>
+                    <p>Add or remove users from groups.</p>
+                </div>
+            </div>
+            <div class="col d-flex align-items-start">
+                <i class="bi bi-arrow-left-right flex-shrink-0 me-3" style="font-size: 1.75em;"></i>
+                <div>
+                    <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Manage Conversion</h3>
+                    <p>Manage conversion rates and settings.</p>
+                </div>
+            </div>
+            <div class="col d-flex align-items-start">
+                <i class="bi bi-clock-history flex-shrink-0 me-3" style="font-size: 1.75em;"></i>
+                <div>
+                    <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Manage History</h3>
+                    <p>View and manage user activity history.</p>
+                </div>
+            </div>
+        </div>
+
+        </div>
 </div>

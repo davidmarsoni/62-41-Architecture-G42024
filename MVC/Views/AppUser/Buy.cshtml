@@ -15,7 +15,7 @@
                 <div class="col">
                     <div class="form-group">
                         <label asp-for="AccountId" class="control-label">User</label>
-                        <select asp-for="AccountId" class="form-control" asp-items="ViewBag.AccountsSelect"></select>
+                        <select asp-for="AccountId" class="form-select" asp-items="ViewBag.AccountsSelect"></select>
                         <span asp-validation-for="AccountId" class="text-danger"></span>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                 <div class="col">
                     <div class="form-group">
                         <label asp-for="ConversionId" class="control-label">Conversion</label>
-                        <select asp-for="ConversionId" class="form-control" asp-items="ViewBag.ConversionsSelect"></select>
+                        <select asp-for="ConversionId" class="form-select" asp-items="ViewBag.ConversionsSelect"></select>
                         <span asp-validation-for="ConversionId" class="text-danger"></span>
                     </div>
                 </div>

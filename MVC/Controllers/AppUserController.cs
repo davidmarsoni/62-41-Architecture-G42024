@@ -2,6 +2,8 @@
 using DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Identity.Client;
+using MVC.Controllers.Admin;
 using MVC.Controllers.Util;
 using MVC.Models;
 using MVC.Services.Interfaces;
@@ -18,6 +20,8 @@ namespace MVC.Controllers
         private readonly IConversionService _conversionService;
         private IEnumerable<ConversionDTO>? _conversionDTOs;
         private decimal _calculatedPrice;
+
+        private int _accountId = 0;
 
         public AppUserController(ILogger<AppUserController> logger, ITransactionService transactionService, ITransactionHistoryService transactionHistoryService, IAccountService accountService, IConversionService conversionService)
         {
@@ -175,12 +179,54 @@ namespace MVC.Controllers
             return View();
         }
 
-        // GET: AppUser/History
-        public async Task<IActionResult> History()
+        // GET: AppUser/Account
+        public async Task<IActionResult> Account()
         {
             await fetchAllAccountAsync();
-            return View();
+            var model = new AppUserHistroyViewModel()
+            {
+                AccountId = _accountId,
+                TransactionHistories = new List<TransactionHistoryDTO>()
+            };
+
+            return View(model);
         }
+
+        // POST: AppUser/GetAccountInfo
+        [HttpPost]
+        public async Task<IActionResult> GetAccountInfo(int accountId)
+        {
+            //get account with accountId
+            AccountDTO? account = await _accountService.GetAccountById(accountId);
+
+            //get transaction histories with accountId
+            IEnumerable<TransactionHistoryDTO>? transactionHistories = await _transactionHistoryService.GetTransactionHistoriesByAccountId(accountId);
+
+            if (account == null)
+            {
+                ToastrUtil.ToastrError(this, "Account not found");
+                await fetchAllAccountAsync();
+                return View("Account");
+            }
+
+            if (transactionHistories == null)
+            {
+                ToastrUtil.ToastrError(this, "Transaction histories not found");
+                await fetchAllAccountAsync();
+                return View("Account");
+            }
+
+            _accountId = accountId;
+            await fetchAllAccountAsync();
+            ToastrUtil.ToastrSuccess(this, "Updated account informaton successfully");
+            return View("Account", new AppUserHistroyViewModel()
+            {
+                AccountId = account.AccountId,
+                Balance = account.Balance,
+                TransactionHistories = transactionHistories.ToList()
+            });
+        }
+
 
         public async Task fetchAllAccountAsync()
         {

@@ -1,0 +1,47 @@
+﻿@model List<DTO.TransactionHistoryDTO>
+@{
+    ViewData["Title"] = "Transaction History";
+}
+
+<h1 class="mt-5">Transaction History</h1>
+
+<div class="col">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>DateTime</th>
+                <th>Transaction type</th>
+                <th>Src</th>
+
+                <th>Amount</th>
+                <th>Conversion name</th>
+                <th>Conversion value</th>
+        </thead>
+        <tbody>
+            @if (Model == null || !Model.Any())
+            {
+                <tr>
+                    <td colspan="6">No transactions</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var transaction in Model)
+                {
+                    <tr>
+                        <td>@(transaction.DateTime?.ToString("dddd, MM.dd.yyyy 'at' hh:mm tt") ?? "N/A")</td>
+                        <td>@transaction.TransactionType</td>
+                        <td>@transaction.Src</td>
+                        <td>@transaction.Amount CHF</td>
+                        <td>@transaction.ConversionName</td>
+                        <td>@(transaction.ConversionValue != null && transaction.ConversionValue != 0 ? $"{transaction.ConversionValue} CHF" : transaction.ConversionValue.ToString())</td>
+
+                    </tr>
+                }
+            }
+            
+        </tbody>
+    </table>
+</div>
+
+

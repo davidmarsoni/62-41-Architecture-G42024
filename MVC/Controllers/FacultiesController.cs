@@ -34,7 +34,7 @@ namespace MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var groups = await _groupService.GetAllGroups();
-            var users = await _userService.GetAllUsers();
+            var users = await _userService.GetAllUsersActiveWithAccount();
 
             if (groups == null || users == null)
             {
@@ -53,6 +53,7 @@ namespace MVC.Controllers
             return View(model);
         }
 
+        // GET: Faculties/ListOfUsersCheck
         public async Task<IActionResult> ListOfUsersCheck()
         { 
             List<UserViewModel> _selectedUsersCopy = new List<UserViewModel>();

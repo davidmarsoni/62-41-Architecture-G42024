@@ -6,5 +6,6 @@ namespace MVC.Services.Interfaces
     {
         public Task<TransactionHistoryDTO?> GetTransactionHistoryById(int id);
         public Task<IEnumerable<TransactionHistoryDTO>?> GetAllTransactionHistories();
+        Task<IEnumerable<TransactionHistoryDTO>?> GetTransactionHistoriesByAccountId(int accountId);
     }
 }
