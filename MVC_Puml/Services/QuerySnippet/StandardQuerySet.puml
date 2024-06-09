@@ -1,0 +1,10 @@
+@startuml
+class StandardQuerySet {
+    + {static} <<async>> GetAll(httpClient:HttpClient, url:String) : Task<IEnumerable<T>?>
+    + {static} <<async>> Get(httpClient:HttpClient, url:String) : Task<T?>
+    + {static} <<async>> Post(httpClient:HttpClient, url:String, obj:T) : Task<T?>
+    + {static} <<async>> PostNoReturn(httpClient:HttpClient, url:String, obj:T) : Task<Boolean>
+    + {static} <<async>> PutNoReturn(httpClient:HttpClient, url:String, obj:T) : Task<Boolean>
+    + {static} <<async>> Delete(httpClient:HttpClient, url:String) : Task<Boolean>
+}
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+class AccountService {
+    - <<readonly>> _baseUrl : string
+    + AccountService(client:HttpClient, configuration:IConfiguration)
+    + <<async>> GetAccountById(id:int) : Task<AccountDTO?>
+    + <<async>> GetAllAccounts() : Task<IEnumerable<AccountDTO>?>
+    + <<async>> CreateAccount(accountDTO:AccountDTO) : Task<AccountDTO?>
+    + <<async>> UpdateAccount(accountDTO:AccountDTO) : Task<Boolean>
+    + <<async>> DeleteAccount(id:int) : Task<Boolean>
+    + <<async>> GetAccountByUserId(userId:int) : Task<AccountDTO?>
+}
+IAccountService <|-- AccountService
+AccountService --> "_client" HttpClient
+@enduml

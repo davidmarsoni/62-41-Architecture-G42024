@@ -1,0 +1,6 @@
+@startuml
+class AppUserPayOnlineViewModel {
+    + AccountId : int <<get>> <<set>>
+    + Amount : decimal <<get>> <<set>>
+}
+@enduml

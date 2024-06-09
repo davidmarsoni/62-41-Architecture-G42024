@@ -1,0 +1,17 @@
+@startuml
+!include .\\PrintOMaticContextFactory.puml
+!include .\\PrintOMatic_Context.puml
+!include .\\Classes\Enums.puml
+!include .\\Models\Account.puml
+!include .\\Models\Conversion.puml
+!include .\\Models\Group.puml
+!include .\\Models\TransactionHistory.puml
+!include .\\Models\User.puml
+!include .\\Models\UserGroup.puml
+!include .\\obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.puml
+!include .\\obj\Debug\net8.0\DAL.AssemblyInfo.puml
+!include .\\obj\Debug\net8.0\DAL.GlobalUsings.g.puml
+!include .\\obj\Release\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.puml
+!include .\\obj\Release\net8.0\DAL.AssemblyInfo.puml
+!include .\\obj\Release\net8.0\DAL.GlobalUsings.g.puml
+@enduml

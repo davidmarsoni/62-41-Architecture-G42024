@@ -1,0 +1,13 @@
+@startuml
+class ToastrUtil <<static>> {
+    + <<const>> ERROR : string = "error"
+    + <<const>> INFO : string = "info"
+    + <<const>> SUCCESS : string = "success"
+    + <<const>> WARNING : string = "warning"
+    + {static} Toastr(controller:Controller, title:string, message:string, type:string) : void
+    + {static} ToastrError(controller:Controller, message:string) : void
+    + {static} ToastrInfo(controller:Controller, message:string) : void
+    + {static} ToastrSuccess(controller:Controller, message:string) : void
+    + {static} ToastrWarning(controller:Controller, message:string) : void
+}
+@enduml

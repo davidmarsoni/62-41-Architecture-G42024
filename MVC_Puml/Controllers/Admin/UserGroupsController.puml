@@ -1,0 +1,20 @@
+@startuml
+class UserGroupsController {
+    + UserGroupsController(logger:ILogger<UserGroupsController>, userGroupService:IUserGroupService, userService:IUserService, groupService:IGroupService)
+    + <<async>> Index(page:int?, pageSize:int) : Task<IActionResult>
+    + <<async>> Details(id:int?) : Task<IActionResult>
+    + <<async>> Create() : Task<IActionResult>
+    + <<async>> Create(userGroup:UserGroupDTO) : Task<IActionResult>
+    + <<async>> Delete(id:int?) : Task<IActionResult>
+    + <<async>> DeleteConfirmed(id:int) : Task<IActionResult>
+    - idNotProvided() : IActionResult
+    - userGroupNotFound() : IActionResult
+}
+class "ILogger`1"<T> {
+}
+Controller <|-- UserGroupsController
+UserGroupsController --> "_logger<UserGroupsController>" "ILogger`1"
+UserGroupsController --> "_userGroupService" IUserGroupService
+UserGroupsController --> "_userService" IUserService
+UserGroupsController --> "_groupService" IGroupService
+@enduml

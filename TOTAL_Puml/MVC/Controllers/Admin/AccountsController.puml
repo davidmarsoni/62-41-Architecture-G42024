@@ -1,0 +1,22 @@
+@startuml
+class AccountsController {
+    + AccountsController(logger:ILogger<AccountsController>, accountService:IAccountService, userService:IUserService)
+    + <<async>> Index() : Task<IActionResult>
+    + <<async>> Details(id:int?) : Task<IActionResult>
+    + <<async>> CreateAsync() : Task<IActionResult>
+    + <<async>> Create(account:AccountDTO) : Task<IActionResult>
+    + <<async>> Edit(id:int?) : Task<IActionResult>
+    + <<async>> Edit(id:int, account:AccountDTO) : Task<IActionResult>
+    + <<async>> Delete(id:int?) : Task<IActionResult>
+    + <<async>> DeleteConfirmed(id:int) : Task<IActionResult>
+    - idNotProvided() : IActionResult
+    - accountNotFound() : IActionResult
+    + <<async>> fetchAllUsersAsync() : Task
+}
+class "ILogger`1"<T> {
+}
+Controller <|-- AccountsController
+AccountsController --> "_logger<AccountsController>" "ILogger`1"
+AccountsController --> "_accountService" IAccountService
+AccountsController --> "_userService" IUserService
+@enduml

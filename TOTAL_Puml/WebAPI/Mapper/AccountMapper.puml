@@ -1,0 +1,6 @@
+@startuml
+class AccountMapper {
+    + {static} toDTO(account:Account, user:User?) : AccountDTO
+    + {static} toDAL(accountDTO:AccountDTO) : Account
+}
+@enduml

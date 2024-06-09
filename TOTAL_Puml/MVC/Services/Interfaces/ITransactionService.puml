@@ -1,0 +1,5 @@
+@startuml
+interface ITransactionService {
+    + PostTransaction(transactionHistoryDTO:TransactionHistoryDTO) : Task<Boolean>
+}
+@enduml

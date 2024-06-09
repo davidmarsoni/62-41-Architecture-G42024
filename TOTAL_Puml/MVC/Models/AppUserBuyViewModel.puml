@@ -1,0 +1,9 @@
+@startuml
+class AppUserBuyViewModel {
+    + AccountId : int <<get>> <<set>>
+    + ConversionId : int <<get>> <<set>>
+    + ConversionValue : decimal? <<get>> <<set>>
+    + Quantity : int <<get>> <<set>>
+    + calculatedPrice : decimal <<get>>
+}
+@enduml

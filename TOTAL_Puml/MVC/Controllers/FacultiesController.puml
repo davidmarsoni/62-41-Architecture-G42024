@@ -1,0 +1,25 @@
+@startuml
+class FacultiesController {
+    + FacultiesController(logger:ILogger<FacultiesController>, userService:IUserService, groupService:IGroupService, accountService:IAccountService, transactionService:ITransactionService)
+    + <<async>> Index() : Task<IActionResult>
+    + <<async>> ListOfUsersCheck() : Task<IActionResult>
+    + <<async>> AddSelectedUser(userId:int) : Task<IActionResult>
+    + <<async>> AddSelectedGroup(groupId:int) : Task<IActionResult>
+    + DeleteSelectedUser(userId:int) : IActionResult
+    + ClearSelectedUsers() : IActionResult
+    + <<async>> AddQuotaToSelectedUsers(quota:decimal) : Task<IActionResult>
+    - <<async>> AddUserToSelectedUsers(user:UserDTO) : Task<Boolean>
+    - <<async>> UpdatesSelectedUsers() : Task
+}
+class "ILogger`1"<T> {
+}
+class "List`1"<T> {
+}
+Controller <|-- FacultiesController
+FacultiesController --> "_logger<FacultiesController>" "ILogger`1"
+FacultiesController --> "_userService" IUserService
+FacultiesController --> "_groupService" IGroupService
+FacultiesController --> "_accountService" IAccountService
+FacultiesController --> "_transactionService" ITransactionService
+FacultiesController o-> "_selectedUsers<UserViewModel>" "List`1"
+@enduml

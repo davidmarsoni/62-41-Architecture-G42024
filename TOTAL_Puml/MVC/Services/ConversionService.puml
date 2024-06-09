@@ -1,0 +1,13 @@
+@startuml
+class ConversionService {
+    - <<readonly>> _baseUrl : string
+    + ConversionService(client:HttpClient, configuration:IConfiguration)
+    + <<async>> GetConversionById(id:int) : Task<ConversionDTO?>
+    + <<async>> GetAllConversions() : Task<IEnumerable<ConversionDTO>?>
+    + <<async>> CreateConversion(conversionDTO:ConversionDTO) : Task<ConversionDTO?>
+    + <<async>> UpdateConversion(conversionDTO:ConversionDTO) : Task<Boolean>
+    + <<async>> DeleteConversion(id:int) : Task<Boolean>
+}
+IConversionService <|-- ConversionService
+ConversionService --> "_client" HttpClient
+@enduml

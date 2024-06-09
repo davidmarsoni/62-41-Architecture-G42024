@@ -1,0 +1,16 @@
+@startuml
+class UserService {
+    - <<readonly>> _baseUrl : string
+    + UserService(client:HttpClient, configuration:IConfiguration)
+    + <<async>> GetUserById(id:int) : Task<UserDTO?>
+    + <<async>> GetAllUsers() : Task<IEnumerable<UserDTO>?>
+    + <<async>> GetAllUsersActiveWithoutAccount() : Task<IEnumerable<UserDTO>?>
+    + <<async>> GetAllUsersActiveWithAccount() : Task<IEnumerable<UserDTO>?>
+    + <<async>> CreateUser(userDTO:UserDTO) : Task<UserDTO?>
+    + <<async>> UpdateUser(userDTO:UserDTO) : Task<Boolean>
+    + <<async>> DeleteUser(id:int) : Task<Boolean>
+    + <<async>> GetUsersByGroupId(groupId:int) : Task<IEnumerable<UserDTO>?>
+}
+IUserService <|-- UserService
+UserService --> "_client" HttpClient
+@enduml

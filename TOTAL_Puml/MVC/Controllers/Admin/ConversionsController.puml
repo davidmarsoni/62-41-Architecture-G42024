@@ -1,0 +1,20 @@
+@startuml
+class ConversionsController {
+    + ConversionsController(logger:ILogger<AccountsController>, conversionService:IConversionService)
+    + <<async>> Index() : Task<IActionResult>
+    + <<async>> Details(id:int?) : Task<IActionResult>
+    + Create() : IActionResult
+    + <<async>> Create(conversion:ConversionDTO) : Task<IActionResult>
+    + <<async>> Edit(id:int?) : Task<IActionResult>
+    + <<async>> Edit(id:int, conversion:ConversionDTO) : Task<IActionResult>
+    + <<async>> Delete(id:int?) : Task<IActionResult>
+    + <<async>> DeleteConfirmed(id:int) : Task<IActionResult>
+    - idNotProvided() : IActionResult
+    - conversionNotFound() : IActionResult
+}
+class "ILogger`1"<T> {
+}
+Controller <|-- ConversionsController
+ConversionsController --> "_logger<AccountsController>" "ILogger`1"
+ConversionsController --> "_conversionService" IConversionService
+@enduml

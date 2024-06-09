@@ -1,0 +1,8 @@
+@startuml
+interface IUserGroupService {
+    + GetUserGroupById(id:int) : Task<UserGroupDTO?>
+    + GetAllUserGroups() : Task<IEnumerable<UserGroupDTO>?>
+    + CreateUserGroup(userGroupDTO:UserGroupDTO) : Task<UserGroupDTO?>
+    + DeleteUserGroup(id:int) : Task<Boolean>
+}
+@enduml

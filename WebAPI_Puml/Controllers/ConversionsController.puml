@@ -1,0 +1,13 @@
+@startuml
+class ConversionsController {
+    + ConversionsController(context:PrintOMatic_Context)
+    + <<async>> GetConversions() : Task<ActionResult<IEnumerable<ConversionDTO>>>
+    + <<async>> GetConversion(id:int) : Task<ActionResult<ConversionDTO>>
+    + <<async>> PutConversion(id:int, conversionDTO:ConversionDTO) : Task<IActionResult>
+    + <<async>> PostConversion(conversionDTO:ConversionDTO) : Task<ActionResult<ConversionDTO>>
+    + <<async>> DeleteConversion(id:int) : Task<IActionResult>
+    - ConversionExists(id:int) : bool
+}
+ControllerBase <|-- ConversionsController
+ConversionsController --> "_context" PrintOMatic_Context
+@enduml

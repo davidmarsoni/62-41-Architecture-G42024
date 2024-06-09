@@ -1,0 +1,9 @@
+@startuml
+class UserGroup {
+    + Id : int <<get>> <<set>>
+    + <<required>> UserId : int <<get>> <<set>>
+    + <<required>> GroupId : int <<get>> <<set>>
+}
+UserGroup o-> "User" User
+UserGroup o-> "Group" Group
+@enduml

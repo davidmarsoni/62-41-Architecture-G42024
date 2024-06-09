@@ -1,0 +1,20 @@
+@startuml
+class UserViewModel {
+    + UserId : int <<get>> <<set>>
+    + Username : string <<get>> <<set>>
+    + LastName : string? <<get>> <<set>>
+    + FirstName : string <<get>> <<set>>
+    + Gender : string <<get>> <<set>>
+    + Address : string <<get>> <<set>>
+    + Email : string <<get>> <<set>>
+    + IsDeleted : bool <<get>> <<set>>
+    + AccountId : int <<get>> <<set>>
+    + Balance : decimal <<get>> <<set>>
+    + DisplayName : string <<get>>
+    + UserViewModel()
+    + UserViewModel(userDTO:UserDTO, accountDTO:AccountDTO, groupsDTO:List<GroupDTO>)
+}
+class "List`1"<T> {
+}
+UserViewModel --> "Groups<GroupDTO>" "List`1"
+@enduml

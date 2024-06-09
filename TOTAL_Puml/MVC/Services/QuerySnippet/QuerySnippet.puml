@@ -1,0 +1,17 @@
+@startuml
+class QuerySnippet <<static>> {
+    + {static} <<async>> GetOnURL(httpClient:HttpClient, url:String) : Task<HttpResponseMessage?>
+    + {static} <<async>> PostOnUrl(httpClient:HttpClient, url:String, obj:Object) : Task<HttpResponseMessage?>
+    + {static} <<async>> PutOnUrl(httpClient:HttpClient, url:String, obj:Object) : Task<HttpResponseMessage?>
+    + {static} <<async>> DeleteOnUrl(httpClient:HttpClient, url:String) : Task<HttpResponseMessage?>
+    + {static} HttpResponseHandling(httpResponse:HttpResponseMessage?, originalOperation:string) : T?
+    + {static} isHttpResponseMessageSuccess(httpResponse:HttpResponseMessage?, originalOperation:string) : Boolean
+    + {static} JsonDeserialize(json:string) : T?
+}
+QuerySnippet o-> "GETALL" String
+QuerySnippet o-> "GET" String
+QuerySnippet o-> "POST" String
+QuerySnippet o-> "PUT" String
+QuerySnippet o-> "DELETE" String
+QuerySnippet o-> "JsonSerializerOpt" JsonSerializerOptions
+@enduml

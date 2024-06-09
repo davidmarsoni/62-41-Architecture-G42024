@@ -1,0 +1,10 @@
+@startuml
+interface IAccountService {
+    + GetAccountById(id:int) : Task<AccountDTO?>
+    + GetAllAccounts() : Task<IEnumerable<AccountDTO>?>
+    + GetAccountByUserId(userId:int) : Task<AccountDTO?>
+    + CreateAccount(accountDTO:AccountDTO) : Task<AccountDTO?>
+    + UpdateAccount(accountDTO:AccountDTO) : Task<Boolean>
+    + DeleteAccount(id:int) : Task<Boolean>
+}
+@enduml

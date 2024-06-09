@@ -1,0 +1,12 @@
+@startuml
+interface IUserService {
+    + GetUserById(id:int) : Task<UserDTO?>
+    + GetAllUsers() : Task<IEnumerable<UserDTO>?>
+    + GetUsersByGroupId(groupId:int) : Task<IEnumerable<UserDTO>?>
+    + GetAllUsersActiveWithoutAccount() : Task<IEnumerable<UserDTO>?>
+    + GetAllUsersActiveWithAccount() : Task<IEnumerable<UserDTO>?>
+    + CreateUser(accountDTO:UserDTO) : Task<UserDTO?>
+    + UpdateUser(accountDTO:UserDTO) : Task<Boolean>
+    + DeleteUser(id:int) : Task<Boolean>
+}
+@enduml

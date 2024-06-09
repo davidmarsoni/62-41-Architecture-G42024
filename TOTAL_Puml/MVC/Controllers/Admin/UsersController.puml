@@ -1,0 +1,20 @@
+@startuml
+class UsersController {
+    + UsersController(logger:ILogger<UsersController>, userService:IUserService)
+    + <<async>> Index() : Task<IActionResult>
+    + <<async>> Details(id:int?) : Task<IActionResult>
+    + Create() : IActionResult
+    + <<async>> Create(user:UserDTO) : Task<IActionResult>
+    + <<async>> Edit(id:int?) : Task<IActionResult>
+    + <<async>> Edit(id:int, user:UserDTO) : Task<IActionResult>
+    + <<async>> Delete(id:int?) : Task<IActionResult>
+    + <<async>> DeleteConfirmed(id:int) : Task<IActionResult>
+    - idNotProvided() : IActionResult
+    - userNotFound() : IActionResult
+}
+class "ILogger`1"<T> {
+}
+Controller <|-- UsersController
+UsersController --> "_logger<UsersController>" "ILogger`1"
+UsersController --> "_userService" IUserService
+@enduml

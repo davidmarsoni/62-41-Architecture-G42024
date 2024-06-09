@@ -1,0 +1,8 @@
+@startuml
+class PrintOMaticContextFactory {
+    + CreateDbContext(args:string[]) : PrintOMatic_Context
+}
+class "IDesignTimeDbContextFactory`1"<T> {
+}
+"IDesignTimeDbContextFactory`1" "<PrintOMatic_Context>" <|-- PrintOMaticContextFactory
+@enduml

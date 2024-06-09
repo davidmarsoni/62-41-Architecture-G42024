@@ -1,0 +1,8 @@
+@startuml
+class AccountDTO {
+    + AccountId : int <<get>> <<set>>
+    + Balance : decimal <<get>> <<set>>
+    + UserId : int <<get>> <<set>>
+    + UserDisplayName : string? <<get>> <<set>>
+}
+@enduml

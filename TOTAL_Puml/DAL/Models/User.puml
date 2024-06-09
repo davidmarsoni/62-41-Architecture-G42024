@@ -1,0 +1,16 @@
+@startuml
+class User {
+    + Id : int <<get>> <<set>>
+    + <<required>> Username : string <<get>> <<set>>
+    + LastName : string? <<get>> <<set>>
+    + <<required>> FirstName : string <<get>> <<set>>
+    + Gender : string? <<get>> <<set>>
+    + Address : string? <<get>> <<set>>
+    + <<required>> Email : string <<get>> <<set>>
+    + IsDeleted : bool <<get>> <<set>>
+}
+class "ICollection`1"<T> {
+}
+User o-> "Groups<Group>" "ICollection`1"
+User o-> "User_Groups<UserGroup>" "ICollection`1"
+@enduml

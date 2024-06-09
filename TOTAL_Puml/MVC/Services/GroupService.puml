@@ -1,0 +1,14 @@
+@startuml
+class GroupService {
+    - <<readonly>> _baseUrl : string
+    + GroupService(client:HttpClient, configuration:IConfiguration)
+    + <<async>> GetGroupById(id:int) : Task<GroupDTO?>
+    + <<async>> GetAllGroups() : Task<IEnumerable<GroupDTO>?>
+    + <<async>> CreateGroup(accountDTO:GroupDTO) : Task<GroupDTO?>
+    + <<async>> UpdateGroup(accountDTO:GroupDTO) : Task<Boolean>
+    + <<async>> DeleteGroup(id:int) : Task<Boolean>
+    + <<async>> GetGroupsByUserId(userId:int) : Task<IEnumerable<GroupDTO>?>
+}
+IGroupService <|-- GroupService
+GroupService --> "_client" HttpClient
+@enduml

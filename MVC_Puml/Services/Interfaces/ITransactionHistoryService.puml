@@ -1,0 +1,7 @@
+@startuml
+interface ITransactionHistoryService {
+    + GetTransactionHistoryById(id:int) : Task<TransactionHistoryDTO?>
+    + GetAllTransactionHistories() : Task<IEnumerable<TransactionHistoryDTO>?>
+    GetTransactionHistoriesByAccountId(accountId:int) : Task<IEnumerable<TransactionHistoryDTO>?>
+}
+@enduml

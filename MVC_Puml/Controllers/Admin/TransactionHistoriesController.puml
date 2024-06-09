@@ -1,0 +1,25 @@
+@startuml
+class TransactionHistoriesController {
+    - _conversionDTOs : IEnumerable<ConversionDTO>?
+    + TransactionHistoriesController(logger:ILogger<TransactionHistoriesController>, transactionHistoryService:ITransactionHistoryService, transactionService:ITransactionService, accountService:IAccountService, conversionService:IConversionService)
+    + <<async>> Index(page:int?, pageSize:int) : Task<IActionResult>
+    + <<async>> Details(id:int?) : Task<IActionResult>
+    + <<async>> Create() : Task<IActionResult>
+    + <<async>> Create(transactionHistory:TransactionHistoryDTO) : Task<IActionResult>
+    - idNotProvided() : IActionResult
+    - transactionHistoryNotFound() : IActionResult
+    + <<async>> setupFields() : Task
+    + <<async>> fetchAllAccountAsync() : Task
+    + <<async>> fetchAllConversionsAsync() : Task
+    + fetchSrcAndTransactionTypeSelects() : void
+    + <<async>> conversionFormalizationAsync(transactionHistoryDTO:TransactionHistoryDTO) : Task
+}
+class "ILogger`1"<T> {
+}
+Controller <|-- TransactionHistoriesController
+TransactionHistoriesController --> "_logger<TransactionHistoriesController>" "ILogger`1"
+TransactionHistoriesController --> "_transactionHistoryService" ITransactionHistoryService
+TransactionHistoriesController --> "_transactionService" ITransactionService
+TransactionHistoriesController --> "_accountService" IAccountService
+TransactionHistoriesController --> "_conversionService" IConversionService
+@enduml

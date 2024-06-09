@@ -1,0 +1,9 @@
+@startuml
+class TransactionService {
+    - <<readonly>> _baseUrl : string
+    + TransactionService(client:HttpClient, configuration:IConfiguration)
+    + PostTransaction(transactionHistoryDTO:TransactionHistoryDTO) : Task<bool>
+}
+ITransactionService <|-- TransactionService
+TransactionService --> "_client" HttpClient
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+class ConversionDTO {
+    + ConversionId : int <<get>> <<set>>
+    + ConversionName : string <<get>> <<set>>
+    + ConversionValue : decimal <<get>> <<set>>
+}
+@enduml

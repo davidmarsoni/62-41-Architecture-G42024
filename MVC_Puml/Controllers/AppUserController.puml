@@ -1,0 +1,27 @@
+@startuml
+class AppUserController {
+    - _conversionDTOs : IEnumerable<ConversionDTO>?
+    - _calculatedPrice : decimal
+    - _accountId : int = 0
+    + AppUserController(logger:ILogger<AppUserController>, transactionService:ITransactionService, transactionHistoryService:ITransactionHistoryService, accountService:IAccountService, conversionService:IConversionService)
+    + Index() : IActionResult
+    + <<async>> Buy() : Task<IActionResult>
+    + <<async>> Calculate(appUserBuyViewModel:AppUserBuyViewModel) : Task<IActionResult>
+    + <<async>> Buy(appUserBuyViewModel:AppUserBuyViewModel, command:string) : Task<IActionResult>
+    + <<async>> PayOnline() : Task<IActionResult>
+    + <<async>> PayOnline(appUserPayOnlineViewModel:AppUserPayOnlineViewModel) : Task<IActionResult>
+    + <<async>> Account() : Task<IActionResult>
+    + <<async>> GetAccountInfo(accountId:int) : Task<IActionResult>
+    + <<async>> fetchAllAccountAsync() : Task
+    + <<async>> fetchAllConversionDTOsAsync() : Task<IEnumerable<ConversionDTO>?>
+    + <<async>> createSelectListConversions() : Task
+}
+class "ILogger`1"<T> {
+}
+Controller <|-- AppUserController
+AppUserController --> "_logger<AppUserController>" "ILogger`1"
+AppUserController --> "_transactionService" ITransactionService
+AppUserController --> "_transactionHistoryService" ITransactionHistoryService
+AppUserController --> "_accountService" IAccountService
+AppUserController --> "_conversionService" IConversionService
+@enduml

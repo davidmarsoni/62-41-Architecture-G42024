@@ -1,0 +1,12 @@
+@startuml
+class Group {
+    + Id : int <<get>> <<set>>
+    + <<required>> Name : string <<get>> <<set>>
+    + Acronym : string? <<get>> <<set>>
+    + IsDeleted : bool <<get>> <<set>>
+}
+class "ICollection`1"<T> {
+}
+Group o-> "Users<User>" "ICollection`1"
+Group o-> "User_Groups<UserGroup>" "ICollection`1"
+@enduml

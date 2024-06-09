@@ -1,0 +1,9 @@
+@startuml
+class GroupDTO {
+    + GroupId : int <<get>> <<set>>
+    + Name : string <<get>> <<set>>
+    + Acronym : string? <<get>> <<set>>
+    + IsDeleted : bool <<get>> <<set>>
+    + DisplayName : string <<get>>
+}
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+class Toastr {
+    + Title : string <<get>> <<set>>
+    + Message : string <<get>> <<set>>
+    + Type : string <<get>> <<set>>
+}
+@enduml

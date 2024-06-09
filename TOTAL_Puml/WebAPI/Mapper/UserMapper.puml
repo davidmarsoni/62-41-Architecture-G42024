@@ -1,0 +1,6 @@
+@startuml
+class UserMapper {
+    + {static} toDTO(user:User) : UserDTO
+    + {static} toDAL(userDTO:UserDTO) : User
+}
+@enduml

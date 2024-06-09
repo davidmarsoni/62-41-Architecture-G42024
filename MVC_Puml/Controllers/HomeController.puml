@@ -1,0 +1,13 @@
+@startuml
+class HomeController {
+    + HomeController(logger:ILogger<HomeController>, accountService:IAccountService)
+    + Index() : IActionResult
+    + <<async>> Accounts() : Task<IActionResult>
+    + Privacy() : IActionResult
+}
+class "ILogger`1"<T> {
+}
+Controller <|-- HomeController
+HomeController --> "_logger<HomeController>" "ILogger`1"
+HomeController --> "_accountService" IAccountService
+@enduml

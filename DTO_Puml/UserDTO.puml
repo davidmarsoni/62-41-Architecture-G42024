@@ -1,0 +1,13 @@
+@startuml
+class UserDTO {
+    + UserId : int <<get>> <<set>>
+    + Username : string <<get>> <<set>>
+    + LastName : string? <<get>> <<set>>
+    + FirstName : string <<get>> <<set>>
+    + Gender : string? <<get>> <<set>>
+    + Address : string? <<get>> <<set>>
+    + Email : string <<get>> <<set>>
+    + IsDeleted : bool <<get>> <<set>>
+    + DisplayName : string <<get>>
+}
+@enduml

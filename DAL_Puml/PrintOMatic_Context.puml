@@ -1,0 +1,18 @@
+@startuml
+class PrintOMatic_Context {
+    + PrintOMatic_Context(options:DbContextOptions<PrintOMatic_Context>)
+    # <<override>> OnModelCreating(modelBuilder:ModelBuilder) : void
+    + <<override>> SaveChanges() : int
+    + <<override>> SaveChangesAsync(cancellationToken:CancellationToken) : Task<int>
+    - UpdateTimestamps() : void
+}
+class "DbSet`1"<T> {
+}
+DbContext <|-- PrintOMatic_Context
+PrintOMatic_Context --> "Conversions<Conversion>" "DbSet`1"
+PrintOMatic_Context --> "Groups<Group>" "DbSet`1"
+PrintOMatic_Context --> "TransactionHistory<TransactionHistory>" "DbSet`1"
+PrintOMatic_Context --> "Accounts<Account>" "DbSet`1"
+PrintOMatic_Context --> "Users<User>" "DbSet`1"
+PrintOMatic_Context --> "UserGroups<UserGroup>" "DbSet`1"
+@enduml

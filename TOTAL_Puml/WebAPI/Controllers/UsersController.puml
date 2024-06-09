@@ -1,0 +1,17 @@
+@startuml
+class UsersController {
+    + UsersController(context:PrintOMatic_Context)
+    + <<async>> GetUsers() : Task<ActionResult<List<UserDTO>>>
+    + <<async>> GetUsersActiveNoAccount() : Task<ActionResult<List<UserDTO>>>
+    + <<async>> GetUsersActive() : Task<ActionResult<List<UserDTO>>>
+    + <<async>> GetUsersActiveWithAccount() : Task<ActionResult<List<UserDTO>>>
+    + <<async>> GetUsersByGroupId(groupId:int) : Task<ActionResult<List<UserDTO>>>
+    + <<async>> GetUser(id:int) : Task<ActionResult<UserDTO>>
+    + <<async>> PutUser(id:int, userDTO:UserDTO) : Task<IActionResult>
+    + <<async>> PostUser(userDTO:UserDTO) : Task<ActionResult<UserDTO>>
+    + <<async>> DeleteUser(id:int) : Task<IActionResult>
+    - UserExists(id:int) : bool
+}
+ControllerBase <|-- UsersController
+UsersController --> "_context" PrintOMatic_Context
+@enduml

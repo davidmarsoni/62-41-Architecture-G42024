@@ -1,0 +1,6 @@
+@startuml
+class UserGroupMapper {
+    + {static} toDTO(userGroup:UserGroup, user:User?, group:Group?) : UserGroupDTO
+    + {static} toDAL(userGroupDTO:UserGroupDTO) : UserGroup
+}
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+class FacultiesViewModel {
+    + UserId : int <<get>> <<set>>
+    + GroupId : int <<get>> <<set>>
+    + Username : string <<get>> <<set>>
+    + GroupName : string <<get>> <<set>>
+}
+class "List`1"<T> {
+}
+FacultiesViewModel --> "SelectedUsers<UserViewModel>" "List`1"
+@enduml

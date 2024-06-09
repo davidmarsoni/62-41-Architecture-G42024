@@ -1,0 +1,13 @@
+@startuml
+class TransactionHistory {
+    + Id : int <<get>> <<set>>
+    + AccountId : int <<get>> <<set>>
+    + <<required>> Amount : decimal <<get>> <<set>>
+    + ConversionName : string? <<get>> <<set>>
+    + ConversionValue : decimal? <<get>> <<set>>
+}
+TransactionHistory o-> "Account" Account
+TransactionHistory --> "DateTime" DateTime
+TransactionHistory --> "Src" Src
+TransactionHistory --> "TransactionType" TransactionType
+@enduml

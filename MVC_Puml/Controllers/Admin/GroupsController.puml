@@ -1,0 +1,20 @@
+@startuml
+class GroupsController {
+    + GroupsController(logger:ILogger<GroupsController>, groupService:IGroupService)
+    + <<async>> Index() : Task<IActionResult>
+    + <<async>> Details(id:int?) : Task<IActionResult>
+    + Create() : IActionResult
+    + <<async>> Create(group:GroupDTO) : Task<IActionResult>
+    + <<async>> Edit(id:int?) : Task<IActionResult>
+    + <<async>> Edit(id:int, group:GroupDTO) : Task<IActionResult>
+    + <<async>> Delete(id:int?) : Task<IActionResult>
+    + <<async>> DeleteConfirmed(id:int) : Task<IActionResult>
+    - idNotProvided() : IActionResult
+    - groupNotFound() : IActionResult
+}
+class "ILogger`1"<T> {
+}
+Controller <|-- GroupsController
+GroupsController --> "_logger<GroupsController>" "ILogger`1"
+GroupsController --> "_groupService" IGroupService
+@enduml

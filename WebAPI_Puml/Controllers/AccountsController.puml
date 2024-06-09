@@ -1,0 +1,14 @@
+@startuml
+class AccountsController {
+    + AccountsController(context:PrintOMatic_Context)
+    + <<async>> GetAccounts() : Task<ActionResult<List<AccountDTO>>>
+    + <<async>> GetAccount(id:int) : Task<ActionResult<AccountDTO>>
+    + <<async>> GetAccountByUserId(userId:int) : Task<ActionResult<AccountDTO>>
+    + <<async>> PutAccount(id:int, accountDTO:AccountDTO) : Task<IActionResult>
+    + <<async>> PostUser(accountDTO:AccountDTO) : Task<ActionResult<AccountDTO>>
+    + <<async>> DeleteAccount(id:int) : Task<IActionResult>
+    - AccountExists(id:int) : bool
+}
+ControllerBase <|-- AccountsController
+AccountsController --> "_context" PrintOMatic_Context
+@enduml

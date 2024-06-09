@@ -1,0 +1,25 @@
+@startuml
+!include .\\Program.puml
+!include .\\Controllers\AccountsController.puml
+!include .\\Controllers\ConversionsController.puml
+!include .\\Controllers\GroupsController.puml
+!include .\\Controllers\TransactionController.puml
+!include .\\Controllers\TransactionHistoriesController.puml
+!include .\\Controllers\UserGroupController.puml
+!include .\\Controllers\UsersController.puml
+!include .\\ExternalServices\PrinterSystemConnector.puml
+!include .\\Mapper\AccountMapper.puml
+!include .\\Mapper\ConversionMapper.puml
+!include .\\Mapper\GroupMapper.puml
+!include .\\Mapper\TransactionHistoryMapper.puml
+!include .\\Mapper\UserGroupMapper.puml
+!include .\\Mapper\UserMapper.puml
+!include .\\obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.puml
+!include .\\obj\Debug\net8.0\WebApi.AssemblyInfo.puml
+!include .\\obj\Debug\net8.0\WebApi.GlobalUsings.g.puml
+!include .\\obj\Debug\net8.0\WebApi.MvcApplicationPartsAssemblyInfo.puml
+!include .\\obj\Release\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.puml
+!include .\\obj\Release\net8.0\WebApi.AssemblyInfo.puml
+!include .\\obj\Release\net8.0\WebApi.GlobalUsings.g.puml
+!include .\\obj\Release\net8.0\WebApi.MvcApplicationPartsAssemblyInfo.puml
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+class TransactionHistoryMapper {
+    + {static} toDTO(transactionHistory:TransactionHistory, user:User?) : TransactionHistoryDTO
+    + {static} toDAL(transactionHistoryDTO:TransactionHistoryDTO) : TransactionHistory
+}
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+class ConversionMapper {
+    + {static} toDTO(conversion:Conversion) : ConversionDTO
+    + {static} toDAL(conversionDTO:ConversionDTO) : Conversion
+}
+@enduml

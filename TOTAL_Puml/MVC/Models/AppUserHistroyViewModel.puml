@@ -1,0 +1,18 @@
+@startuml
+class AppUserHistroyViewModel {
+    + UserId : int <<get>> <<set>>
+    + Username : string <<get>> <<set>>
+    + LastName : string? <<get>> <<set>>
+    + FirstName : string <<get>> <<set>>
+    + Gender : string <<get>> <<set>>
+    + Address : string <<get>> <<set>>
+    + Email : string <<get>> <<set>>
+    + IsDeleted : bool <<get>> <<set>>
+    + AccountId : int <<get>> <<set>>
+    + Balance : decimal <<get>> <<set>>
+    + DisplayName : string <<get>>
+}
+class "List`1"<T> {
+}
+AppUserHistroyViewModel --> "TransactionHistories<TransactionHistoryDTO>" "List`1"
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+interface IConversionService {
+    + GetConversionById(id:int) : Task<ConversionDTO?>
+    + GetAllConversions() : Task<IEnumerable<ConversionDTO>?>
+    + CreateConversion(conversionDTO:ConversionDTO) : Task<ConversionDTO?>
+    + UpdateConversion(conversionDTO:ConversionDTO) : Task<Boolean>
+    + DeleteConversion(id:int) : Task<Boolean>
+}
+@enduml

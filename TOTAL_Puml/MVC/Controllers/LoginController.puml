@@ -1,0 +1,10 @@
+@startuml
+class LoginController {
+    + LoginController(logger:ILogger<LoginController>)
+    + Index() : IActionResult
+}
+class "ILogger`1"<T> {
+}
+Controller <|-- LoginController
+LoginController --> "_logger<LoginController>" "ILogger`1"
+@enduml

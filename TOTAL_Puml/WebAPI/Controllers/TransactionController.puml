@@ -1,0 +1,9 @@
+@startuml
+class TransactionController {
+    + TransactionController(context:PrintOMatic_Context)
+    + <<async>> AddTransaction(transactionHistoryDTO:TransactionHistoryDTO) : Task<ActionResult>
+    - <<async>> ValidateConversion(transactionHistoryDTO:TransactionHistoryDTO) : Task<IActionResult>
+}
+ControllerBase <|-- TransactionController
+TransactionController --> "_context" PrintOMatic_Context
+@enduml

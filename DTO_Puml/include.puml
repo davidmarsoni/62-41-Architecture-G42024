@@ -1,0 +1,14 @@
+@startuml
+!include .\\AccountDTO.puml
+!include .\\ConversionDTO.puml
+!include .\\GroupDTO.puml
+!include .\\TransactionHistoryDTO.puml
+!include .\\UserDTO.puml
+!include .\\UserGroupDTO.puml
+!include .\\obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.puml
+!include .\\obj\Debug\net8.0\DTO.AssemblyInfo.puml
+!include .\\obj\Debug\net8.0\DTO.GlobalUsings.g.puml
+!include .\\obj\Release\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.puml
+!include .\\obj\Release\net8.0\DTO.AssemblyInfo.puml
+!include .\\obj\Release\net8.0\DTO.GlobalUsings.g.puml
+@enduml

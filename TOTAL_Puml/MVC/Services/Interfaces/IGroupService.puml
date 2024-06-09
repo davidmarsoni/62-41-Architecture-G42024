@@ -1,0 +1,10 @@
+@startuml
+interface IGroupService {
+    + GetGroupById(id:int) : Task<GroupDTO?>
+    + GetAllGroups() : Task<IEnumerable<GroupDTO>?>
+    + GetGroupsByUserId(userId:int) : Task<IEnumerable<GroupDTO>?>
+    + CreateGroup(accountDTO:GroupDTO) : Task<GroupDTO?>
+    + UpdateGroup(accountDTO:GroupDTO) : Task<Boolean>
+    + DeleteGroup(id:int) : Task<Boolean>
+}
+@enduml

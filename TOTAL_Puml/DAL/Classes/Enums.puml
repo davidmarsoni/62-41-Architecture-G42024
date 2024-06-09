@@ -1,0 +1,13 @@
+@startuml
+enum Src {
+    PayOnline,
+    PaymentDB,
+    Printer,
+    Allocation,
+}
+enum TransactionType {
+    AddCredit,
+    UseCredit,
+    CorrectCredit,
+}
+@enduml

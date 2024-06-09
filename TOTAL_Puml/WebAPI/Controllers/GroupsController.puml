@@ -1,0 +1,15 @@
+@startuml
+class GroupsController {
+    + GroupsController(context:PrintOMatic_Context)
+    + <<async>> GetGroups() : Task<ActionResult<IEnumerable<GroupDTO>>>
+    + <<async>> GetUsersActive() : Task<ActionResult<List<GroupDTO>>>
+    + <<async>> GetGroup(id:int) : Task<ActionResult<GroupDTO>>
+    + <<async>> GetGroupsByUserId(userId:int) : Task<ActionResult<List<GroupDTO>>>
+    + <<async>> PutGroup(id:int, groupDTO:GroupDTO) : Task<IActionResult>
+    + <<async>> PostGroup(groupDTO:GroupDTO) : Task<ActionResult<GroupDTO>>
+    + <<async>> DeleteGroup(id:int) : Task<IActionResult>
+    - GroupExists(id:int) : bool
+}
+ControllerBase <|-- GroupsController
+GroupsController --> "_context" PrintOMatic_Context
+@enduml

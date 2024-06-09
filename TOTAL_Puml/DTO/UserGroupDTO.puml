@@ -1,0 +1,9 @@
+@startuml
+class UserGroupDTO {
+    + UserGroupId : int <<get>> <<set>>
+    + UserId : int <<get>> <<set>>
+    + UserDisplayName : string? <<get>> <<set>>
+    + GroupId : int <<get>> <<set>>
+    + GroupDisplayName : string? <<get>> <<set>>
+}
+@enduml

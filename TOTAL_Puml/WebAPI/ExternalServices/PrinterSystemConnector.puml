@@ -1,0 +1,11 @@
+@startuml
+class PrinterSystemConnector <<sealed>> {
+    - PrinterSystemConnector()
+    + {static} getConnector() : PrinterSystemConnector
+    + IsConnected() : Boolean
+    + <<async>> ConnectToPrinterServer() : Task<Boolean>
+    + <<async>> PushTransactionOntoPrinterServer(conversionName:String, NumberOfPages:int) : Task<Boolean>
+}
+PrinterSystemConnector o-> "isConnected" Boolean
+PrinterSystemConnector o-> "_printerSystemConnector" PrinterSystemConnector
+@enduml

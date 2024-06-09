@@ -1,0 +1,10 @@
+@startuml
+class TransactionHistoriesController {
+    + TransactionHistoriesController(context:PrintOMatic_Context)
+    + <<async>> GetTransactionHistory() : Task<ActionResult<IEnumerable<TransactionHistoryDTO>>>
+    + <<async>> GetTransactionHistory(id:int) : Task<ActionResult<TransactionHistoryDTO>>
+    + <<async>> GetTransactionHistoriesByAccountId(accountId:int) : Task<ActionResult<IEnumerable<TransactionHistoryDTO>>>
+}
+ControllerBase <|-- TransactionHistoriesController
+TransactionHistoriesController --> "_context" PrintOMatic_Context
+@enduml

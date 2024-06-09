@@ -1,0 +1,11 @@
+@startuml
+class TransactionHistoryService {
+    - <<readonly>> _baseUrl : string
+    + TransactionHistoryService(client:HttpClient, configuration:IConfiguration)
+    + <<async>> GetAllTransactionHistories() : Task<IEnumerable<TransactionHistoryDTO>?>
+    + GetTransactionHistoriesByAccountId(accountId:int) : Task<IEnumerable<TransactionHistoryDTO>?>
+    + <<async>> GetTransactionHistoryById(id:int) : Task<TransactionHistoryDTO?>
+}
+ITransactionHistoryService <|-- TransactionHistoryService
+TransactionHistoryService --> "_client" HttpClient
+@enduml

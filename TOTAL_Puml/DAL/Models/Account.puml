@@ -1,0 +1,10 @@
+@startuml
+class Account {
+    + Id : int <<get>> <<set>>
+    + <<required>> UserId : int <<get>> <<set>>
+    + <<required>> Balance : decimal <<get>> <<set>>
+}
+Account o-> "User" User
+Account --> "CreatedAt" DateTime
+Account --> "UpdatedAt" DateTime
+@enduml
